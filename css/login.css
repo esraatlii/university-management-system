@@ -15,7 +15,11 @@ body {
 .logo-icon {
     width: 65px;
     height: 65px;
+<<<<<<< HEAD
     background: #2563EB;
+=======
+    background: #5B45FF;
+>>>>>>> 8cda28132403523e44c6951cf6a04f3a7d83291c
     color: white;
     font-size: 30px;
     border-radius: 20px;
@@ -81,7 +85,11 @@ body {
 
 .login-btn {
     width: 100%;
+<<<<<<< HEAD
     background: #2563EB;
+=======
+    background: #5B45FF;
+>>>>>>> 8cda28132403523e44c6951cf6a04f3a7d83291c
     color: white;
     border: none;
     padding: 12px;
@@ -94,7 +102,11 @@ body {
 }
 
 .login-btn:hover {
+<<<<<<< HEAD
     background: #2563EB;
+=======
+    background: #4b36e8;
+>>>>>>> 8cda28132403523e44c6951cf6a04f3a7d83291c
     transform: translateY(-2px);
 }
 
@@ -102,4 +114,8 @@ body {
     .login-card{
         width: 90%;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8cda28132403523e44c6951cf6a04f3a7d83291c
