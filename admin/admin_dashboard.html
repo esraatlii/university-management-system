@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Paneli</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="sidebar-header">Kampüs Yön.</div>
+        <nav class="menu-items">
+          <a href="#" class="active"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
+          
+          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanici Ekle</span></a>
+          
+          <a href="department_identification.html"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
+          
+          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
+          
+          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış yap</span></a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <h3>Kullanıcı Yönetimi</h3>
+          <div class="logoutSection">
+            <div class="user-profile-circle">
+              SB
+            </div>
+          
+          <div class="user-info">
+            <span class="userInfoName">Görevli İsmi</span>
+            <span class="userInfoRole">Rolü</span>
+          </div>
+          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+          </div>
+        </header>
+
+        <div class="content-body">
+          <div class="welcome-section">
+            <div class="welcome-text"> 
+              <h3>Hoş Geldin, "Görevli İsmi"</h3>
+              <p>Sistem paneli ve kullanıcı yönetimi özet raporu</p>
+            </div>
+            <div class="date">8 Aralık 2025</div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon stat-icon-blue">
+                <i class="fas fa-users"></i>
+              </div>
+              <p class="stat-label">Toplam Kullanici</p>
+              <h2 class="stat-number">42</h2>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-icon-green">
+                <i class="fas fas fa-building"></i>
+              </div>
+              <p class="stat-label">Aktif Bölümler</p>
+              <h2 class="stat-number">12</h2>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-icon-orange">
+                <i class="fas fa-user-check"></i>
+              </div>
+              <p class="stat-label">Temsilciler</p>
+              <h2 class="stat-number">12</h2>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon stat-icon-purple">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <p class="stat-label">Yöneticiler</p>
+              <h2 class="stat-number">3</h2>
+            </div>
+          </div>
+          <div class="bottom-section">
+            <div class="recentRegisteredUsers">
+              <h3>Son Kayıt Olanlar</h3>
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th>Ad Soyad</th>
+                    <th>Rol</th>
+                    <th>Bölüm</th>
+                    <th>Kayıt Tarihi</th>
+                    <th>Durum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Ahmet Yılmaz</td>
+                    <td>
+                      <span class="badge badge-blue">Department Rep</span>
+                    </td>
+                    <td class="department">Bilgisayar Müh.</td>
+                    <td class="registerDate">06.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td>Zeynep Kaya</td>
+                    <td><span class="badge badge-purple">Dean</span></td>
+                    <td class="department">Mühendislik Fakültesi</td>
+                    <td class="registerDate">05.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td>Mehmet Demir</td>
+                    <td>
+                      <span class="badge badge-blue">Department Rep</span>
+                    </td>
+                    <td class="department">Elektrik Müh.</td>
+                    <td class="registerDate">04.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td>Ayşe Şahin</td>
+                    <td><span class="badge badge-purple">Dean</span></td>
+                    <td class="department">Mimarlık Fakültesi</td>
+                    <td class="registerDate">03.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td>Can Öztürk</td>
+                    <td><span class="badge badge-orange">Admin</span></td>
+                    <td class="department">Sistem Yönetimi</td>
+                    <td class="registerDate">02.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                  <tr>
+                    <td>Elif Arslan</td>
+                    <td>
+                      <span class="badge badge-blue">Department Rep</span>
+                    </td>
+                    <td class="department">Makine Müh.</td>
+                    <td class="registerDate">01.12.2025</td>
+                    <td><span class="badge badge-green">Aktif</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="quick-actions">
+              <h3>Hızlı Erişim</h3>
+              
+              <button class="addNewUsers" onclick="window.location.href='user_add.html'">
+                <i class="fa-solid fa-user-plus"></i>
+                Yeni Kullanıcı Ekle
+              </button>
+              <button class="systemSettings">
+                <i class="fa-solid fa-gear"></i>
+                Sistem Ayarları
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

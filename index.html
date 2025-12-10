@@ -3,21 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap - Ders Programı Sistemi</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>Giriş Yap</title>
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
-    <div class="login-container">
-        <h2>Sisteme Giriş</h2>
-        <p>Lütfen email ve şifrenizi giriniz.</p>
-        
-        <form id="loginForm">
-            </form>
+<div class="container">
 
+    <div class="top-content">
+        <div class="logo-icon">📘</div>
+        <h2 class="uni">Kütahya Dumlupınar Üniversitesi</h2>
+        <p class="subtitle">Mühendislik Fakültesi Ders Programı</p>
     </div>
 
-    <script src="js/login.js"></script>
+    <div class="login-card">
+        <label class="input-label">E-posta</label>
+        <div class="input-field">
+            <span class="icon">✉️</span>
+            <input type="email" placeholder="ornek@email.com" required>
+        </div>
+
+        <label class="input-label">Şifre</label>
+        <div class="input-field">
+            <span class="icon">🔒</span>
+            <input type="password" placeholder="********" required>
+        </div>
+
+        <button class="login-btn">Giriş Yap</button>
+    </div>
+
+</div>
+
 </body>
 </html>
