@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bölüm Temsilcisi Paneli</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/department_rep.css">
+</head>
+<body>
+
+<div class="app-container">
+    
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="rep_dashboard.html" class="menu-item active">
+                <i class="fa-solid fa-border-all"></i> Genel Bakış
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-calendar"></i> Ders Programı
+                <span class="menu-badge">17</span>
+            </a>
+            <a href="courses.html" class="menu-item">
+                <i class="fa-solid fa-book-open"></i> Dersler
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-users"></i> Akademisyenler
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-building"></i> Sınıflar
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fa-regular fa-comment-dots"></i> Talepler
+            </a>
+        </nav>
+
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <h2 class="page-title">Bilgisayar Mühendisliği Paneli</h2>
+            <div class="header-right">
+                <div class="notification-box">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">MD</div>
+                    <div class="user-info">
+                        <span class="name">Arş. Gör. Mehmet Demir</span>
+                        <span class="role">Bölüm Temsilcisi</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div class="welcome-section">
+                <h3>Hoşgeldin, Mehmet Hocam ☕</h3>
+                <p>Bilgisayar Mühendisliği taslak programı üzerinde çalışıyorsunuz.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon-box blue-bg"><i class="fa-regular fa-calendar-check"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-title">Yerleşim Durumu</span>
+                        <h2 class="stat-number">65<small>%</small></h2>
+                        <div class="progress-track">
+                            <div class="progress-fill blue" style="width: 65%"></div>
+                        </div>
+                        <p class="stat-desc">40 dersin 26'sı yerleştirildi.</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <span class="badge-urgent">Acil!</span>
+                    <div class="stat-icon-box red-bg"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-title">Çakışma</span>
+                        <h2 class="stat-number">3</h2>
+                        <div class="progress-track">
+                            <div class="progress-fill red" style="width: 20%"></div>
+                        </div>
+                        <p class="stat-desc">3 ders aynı saatte/sınıfta çakışıyor!</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon-box yellow-bg"><i class="fa-solid fa-user-group"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-title">Hoca Müsaitliği</span>
+                        <h2 class="stat-number">12<small>/15</small></h2>
+                        <div class="progress-track">
+                            <div class="progress-fill yellow" style="width: 80%"></div>
+                        </div>
+                        <p class="stat-desc">3 Hoca henüz talep girmedi.</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon-box green-bg"><i class="fa-regular fa-building"></i></div>
+                    <div class="stat-details">
+                        <span class="stat-title">Sınıf Doluluğu</span>
+                        <h2 class="stat-number">40<small>%</small></h2>
+                        <div class="progress-track">
+                            <div class="progress-fill green" style="width: 40%"></div>
+                        </div>
+                        <p class="stat-desc">Sınıflar henüz müsait.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-grid">
+                <div class="big-blue-card">
+                    <div class="card-top">
+                        <div class="icon-circle"><i class="fa-solid fa-calendar-days"></i></div>
+                        <span class="tag-draft">TASLAK</span>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ders Programı Oluşturucu</h3>
+                        <p>Sürükle-bırak arayüzü ile dersleri haftalık çizelgeye yerleştirin. Çakışmaları anında görün ve optimize edin.</p>
+                        
+                        <div class="mini-stats-row">
+                            <div class="ms-item">
+                                <span>Toplam Ders</span>
+                                <h4>40</h4>
+                            </div>
+                            <div class="ms-item">
+                                <span>Yerleştirilen</span>
+                                <h4>26</h4>
+                            </div>
+                        </div>
+
+                        <a href="#" class="action-btn">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Programa Git / Düzenle <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-dot"></span> Son güncelleme: 2 saat önce
+                    </div>
+                </div>
+
+                <div class="alerts-list-card">
+                    <div class="alerts-header">
+                        <div class="title-with-icon">
+                            <i class="fa-solid fa-triangle-exclamation text-red"></i>
+                            <h3>Dikkat Gerekenler</h3>
+                        </div>
+                        <p>5 öge işlem bekliyor</p>
+                    </div>
+
+                    <ul class="alert-items">
+                        <li>
+                            <i class="fa-solid fa-triangle-exclamation icon-warning"></i>
+                            <div class="alert-text">
+                                <span>Ahmet Hoca: Müsaitlik çizelgesini doldurmadı.</span>
+                                <a href="#">Hatırlat</a>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-triangle-exclamation icon-danger"></i>
+                            <div class="alert-text">
+                                <span>Veri Yapıları: Dersi için sınıf atanmadı.</span>
+                                <a href="#">Düzenle</a>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-triangle-exclamation icon-warning"></i>
+                            <div class="alert-text">
+                                <span>Fizik-101: Kontenjan sınıf kapasitesini aşıyor.</span>
+                                <a href="#">İncele</a>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <a href="#" class="view-all">Tüm bildirimleri görüntüle <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script src="../js/app.js"></script> 
+    <script src="../js/department_rep.js"></script>
+
+</body>
+</html>
+</body>
+</html>

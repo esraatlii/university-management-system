@@ -1,0 +1,36 @@
+/* sadece dekan modülü */
+
+.dean-page {
+    background-color: var(--bg-color);
+}
+
+/* İstatistik kartları */
+.dean-page .stat-card {
+    padding: 20px;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 200px;
+}
+
+/* Ana mavi buton */
+.dean-page .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+/* Küçük ikon butonlar */
+.dean-page .btn-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    cursor: pointer;
+}

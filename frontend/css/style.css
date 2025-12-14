@@ -1,0 +1,128 @@
+/* --- style.css (GENEL ANAYASA) --- */
+
+/* 1. DEĞİŞKENLER (Renk Paleti) */
+:root {
+    --primary-color: #2563EB;   /* Ana Mavi - Projenin Rengi */
+    --primary-light: #EFF6FF;   /* Açık Mavi (Hover için) */
+    --secondary-color: #1F2937; /* Koyu Gri (Yazılar) */
+    --text-muted: #6B7280;      /* Silik Yazılar */
+    --bg-color: #F3F4F6;        /* Sayfa Arka Planı */
+    --white: #FFFFFF;           /* Beyaz */
+    --border-color: #E5E7EB;    /* İnce Çizgiler */
+    --danger: #EF4444;          /* Kırmızı (Hata/Sil) */
+    --success: #10B981;         /* Yeşil (Onay) */
+}
+
+/* 2. SIFIRLAMA (Reset) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--secondary-color);
+    line-height: 1.5;
+}
+
+/* Linklerin alt çizgisini kaldır */
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 3. LAYOUT (İskelet Yapısı) */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* --- SOL MENÜ (SIDEBAR) --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--white);
+    border-right: 1px solid var(--border-color);
+    height: 100vh; /* Ekran boyu kadar */
+    position: fixed; /* Sayfa kaydığında sabit kalsın */
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+}
+
+.sidebar-header {
+    height: 70px; /* Header ile aynı boyda olsun */
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.menu-items {
+    padding: 20px 0;
+    flex: 1; /* Alanı kapla */
+}
+
+.menu-items a {
+    display: flex;
+    align-items: center;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent; /* Aktiflik çizgisi için yer */
+}
+
+/* Mouse ile üzerine gelince veya aktifse */
+.menu-items a:hover, .menu-items a.active {
+    background-color: var(--primary-light);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+/* --- SAĞ TARAF (ANA İÇERİK) --- */
+.main-content {
+    margin-left: 260px; /* Sidebar'ın genişliği kadar boşluk bırak */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 260px);
+}
+
+/* ÜST BAR (HEADER) */
+.header {
+    height: 70px;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Sağa ve sola yasla */
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+}
+
+.header h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.user-profile {
+    font-size: 0.9rem;
+}
+
+.user-profile b {
+    color: var(--primary-color);
+}
+
+/* İÇERİK GÖVDESİ (GRİ ALANIN İÇİ) */
+.content-body {
+    padding: 32px;
+}

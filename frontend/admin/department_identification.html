@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Paneli - Bölüm Yönetimi</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/department_identification.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <aside class="sidebar">
+        <div class="sidebar-header">Kampüs Yön.</div>
+        <nav class="menu-items">
+          <a href="admin_dashboard.html"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
+          
+          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanıcı Ekle</span></a>
+          
+          <a href="department_identification.html" class="active"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
+          
+          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
+          
+          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış Yap</span></a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <h3>Bölüm Yönetimi</h3>
+          <div class="logoutSection">
+            <div class="user-profile-circle">
+              SB
+            </div>
+            <div class="user-info">
+                <span class="userInfoName">Sultan Sena B.</span>
+                <span class="userInfoRole">Yönetici</span>
+            </div>
+            <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+          </div>
+        </header>
+
+        <div class="content-body">
+            <div class="welcome-section">
+                <div class="welcome-text"> 
+                  <h3>Bölüm Tanımlama</h3>
+                  <p>Üniversite bölümlerini ve kimlik kodlarını buradan yönetebilirsiniz.</p>
+                </div>
+            </div>
+
+          <form class="addNewDepartmentForm">
+            <h3 class="form-titles">Yeni Bölüm Ekle</h3>
+            <div class="form-row two-columns">
+                <div class="form-group">
+                    <label for="departmentName">Bölüm Adı</label>
+                    <input type="text" id="departmentName" placeholder="Örn: Bilgisayar Mühendisliği">
+                </div>
+                <div class="form-group">
+                    <label for="departmentCode">Bölüm Kodu</label>
+                    <input type="text" id="departmentCode" placeholder="Örn: CENG">
+                </div>
+            </div>
+            <div class="form-actions">
+                <button class="addNewDepartmentBtn">
+                    <i class="fa-regular fa-floppy-disk"></i> Bölümü Kaydet
+                </button>
+            </div>
+          </form>
+
+          <div class="table-container">
+            <div class="table-header">
+                <h3>Bölüm Listesi</h3>
+                <p>Kayıtlı tüm bölümleri görüntüleyin ve düzenleyin</p>
+            </div>
+            <table class="department-table">
+                <thead>
+                    <tr>
+                        <th>Kod</th>
+                        <th>Bölüm Adı</th>
+                        <th>Eklenme Tarihi</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-blue">CENG</span></td>
+                        <td>Bilgisayar Mühendisliği</td>
+                        <td>15.01.2024</td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
+                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
+                                <i class="fa-regular fa-trash-can" title="Sil"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-blue">MATH</span></td>
+                        <td>Matematik</td>
+                        <td>15.01.2024</td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
+                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
+                                <i class="fa-regular fa-trash-can" title="Sil"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="table-bottom">
+                <p>Toplam <b>10</b> bölümden <b>1-10</b> arası gösteriliyor</p>
+                <div class="tableButtons">
+                    <button>Önceki</button>
+                    <button>Sonraki</button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="../js/app.js"></script>
+    <script src="../js/admin.js"></script>
+  </body>
+</html>
