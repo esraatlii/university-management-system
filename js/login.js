@@ -35,7 +35,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         else if (email === "bolum@uni.edu.tr" && password === "123456") {
             userRole = "department_rep";
             userName = "Bölüm Başkanı";
-            redirectUrl = "department_rep/department_dashboard.html";
+            redirectUrl = "department_rep/rep_dashboard.html";
         }
 
         // --- KONTROL SONUCU ---
