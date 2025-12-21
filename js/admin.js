@@ -14,9 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /* --- 3. KULLANICI LİSTESİ / DASHBOARD (admin_dashboard.html) --- */
-    // Eğer dosya ismin farklıysa burayı güncelle (örn: index.html ise index.html yaz)
     if (path.includes('admin_dashboard.html') || path.endsWith('/admin/')) {
         initAdminDashboard();
+        
+        // --- YENİ EKLENEN: Müsaitlik Gridini Başlat ---
+        initAvailabilityGrid();
     }
 
 });
@@ -33,7 +35,6 @@ function initUserAddPage() {
 
     // Rol değişince Bölüm seçimini aç/kapat
     roleSelect.addEventListener('change', function() {
-        // HTML'de value="1" Öğretim Görevlisi ise
         if (this.value === '1') {
             deptSelect.removeAttribute('disabled');
         } else {
@@ -47,21 +48,18 @@ function initUserAddPage() {
         saveBtn.addEventListener('click', function(e) {
             e.preventDefault(); 
             
-            // Verileri al
             const fullname = document.getElementById('fullname').value;
             const email = document.getElementById('email').value;
             const roleSelect = document.getElementById('role');
-            const roleText = roleSelect.options[roleSelect.selectedIndex].text; // Seçilen rolün yazısını al (Admin vb.)
+            const roleText = roleSelect.options[roleSelect.selectedIndex].text;
             
-            // Basit doğrulama
             if(fullname === "" || email === "" || roleSelect.value === "") {
                 alert("Lütfen isim, e-posta ve rol alanlarını doldurunuz.");
                 return;
             }
 
-            // --- YENİ KISIM: LOCALSTORAGE KAYIT ---
             const newUser = {
-                id: Date.now(), // Benzersiz ID
+                id: Date.now(),
                 name: fullname,
                 email: email,
                 role: roleText,
@@ -69,23 +67,13 @@ function initUserAddPage() {
                 status: "Aktif"
             };
 
-            // Mevcut kullanıcıları getir veya boş dizi oluştur
             let users = JSON.parse(localStorage.getItem('users')) || [];
-            
-            // Yeni kullanıcıyı ekle
             users.push(newUser);
-
-            // Tekrar kaydet
             localStorage.setItem('users', JSON.stringify(users));
 
             alert("Kullanıcı başarıyla oluşturuldu ve listeye eklendi!");
-            
-            // Formu temizle
             document.querySelector('.userAdd-form').reset();
             deptSelect.setAttribute('disabled', 'true');
-            
-            // İstersen işlem bitince listeye yönlendir:
-            // window.location.href = "admin_dashboard.html";
         });
     }
 }
@@ -94,15 +82,16 @@ function initUserAddPage() {
 // 2. KULLANICI LİSTESİ (DASHBOARD) İŞLEMLERİ
 // ==========================================
 function initAdminDashboard() {
+    // --- NOT: Tablo yapın statik HTML olduğu için LocalStorage kısmını YORUMA ALDIM.
+    // Eğer veriler LocalStorage'dan gelsin istiyorsan burayı açabilirsin.
+    // Şimdilik sadece yeni özellik olan Modal Grid'i çalıştırıyoruz.
+
+    /*
     const tableBody = document.querySelector('table tbody');
-    
-    // Eğer sayfada tablo yoksa çalışmayı durdur
     if (!tableBody) return;
 
-    // LocalStorage'dan kullanıcıları çek
     let users = JSON.parse(localStorage.getItem('users'));
 
-    // Eğer hiç kullanıcı yoksa (ilk açılış), örnek veri ekle
     if (!users || users.length === 0) {
         users = [
             { id: 1, name: "Ahmet Yılmaz", role: "Dekan", email: "ahmet@uni.edu.tr", date: "10.12.2024", status: "Aktif" },
@@ -110,35 +99,8 @@ function initAdminDashboard() {
         ];
         localStorage.setItem('users', JSON.stringify(users));
     }
-
-    // Tabloyu temizle (Statik HTML verilerini sil)
-    tableBody.innerHTML = "";
-
-    // Kullanıcıları döngü ile tabloya yaz
-    users.forEach(user => {
-        const row = `
-            <tr>
-                <td>
-                    <div class="user-info-cell">
-                       <div class="user-avatar">${getInitials(user.name)}</div>
-                       <div>
-                           <div class="u-name">${user.name}</div>
-                           <div class="u-email">${user.email}</div>
-                       </div>
-                    </div>
-                </td>
-                <td>${user.role}</td>
-                <td>${user.date}</td>
-                <td><span class="badge badge-green">${user.status}</span></td>
-                <td>
-                    <div class="action-icons">
-                        <i class="fa-regular fa-trash-can" onclick="deleteUser(${user.id})" style="cursor:pointer; color:red;"></i>
-                    </div>
-                </td>
-            </tr>
-        `;
-        tableBody.insertAdjacentHTML('beforeend', row);
-    });
+    */
+    // Mevcut statik tablon korunduğu için buraya dokunmuyoruz.
 }
 
 // ==========================================
@@ -150,7 +112,6 @@ function initDepartmentPage() {
 
     if (!addBtn || !tableBody) return;
 
-    // Not: Bölümler için de LocalStorage yapılabilir ama şimdilik sadece DOM manipülasyonu bırakıldı.
     addBtn.addEventListener('click', function(e) {
         e.preventDefault();
         const deptName = document.getElementById('departmentName').value;
@@ -183,32 +144,107 @@ function initDepartmentPage() {
 // YARDIMCI FONKSİYONLAR
 // ==========================================
 
-// İsimden Baş Harf Alma (Örn: Ahmet Yılmaz -> AY)
 function getInitials(name) {
-    return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
-      .toUpperCase()
-      .substring(0, 2);
+    return name.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 2);
 }
 
-// Kullanıcı Silme (LocalStorage'dan da siler)
 window.deleteUser = function(id) {
     if(confirm("Bu kullanıcıyı silmek istediğinize emin misiniz?")) {
         let users = JSON.parse(localStorage.getItem('users')) || [];
-        // ID'si eşleşmeyenleri filtrele (yani eşleşeni sil)
         users = users.filter(user => user.id != id);
-        // Yeni listeyi kaydet
         localStorage.setItem('users', JSON.stringify(users));
-        // Sayfayı yenile (tablo güncellensin)
         location.reload();
     }
 }
 
-// Basit Satır Silme (Bölümler sayfası için)
 window.deleteRow = function(btn) {
     if(confirm("Silmek istiyor musunuz?")) {
         btn.closest('tr').remove();
     }
+}
+
+
+// =========================================================
+// --- YENİ EKLENEN ÖZELLİK: HOCA MÜSAİTLİK MODALI ---
+// =========================================================
+
+// Global değişkenler
+let modal, gridContainer, modalTitle;
+
+function initAvailabilityGrid() {
+    modal = document.getElementById('availabilityModal');
+    gridContainer = document.getElementById('gridContainer');
+    modalTitle = document.getElementById('modalTitle');
+
+    // Eğer bu elementler sayfada yoksa (başka sayfadaysak) hata vermesin
+    if (!modal || !gridContainer) return;
+
+    const hours = ['08:30', '09:30', '10:30', '11:30', '13:30', '14:30', '15:30', '16:30'];
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+    // Grid'i Temizle (tekrar tekrar eklenmesin)
+    gridContainer.innerHTML = '';
+
+    // Başlık Satırını (Saat boşluk + Pzt, Sal...) tekrar ekle
+    const emptyCorner = document.createElement('div');
+    gridContainer.appendChild(emptyCorner);
+
+    const dayLabels = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum'];
+    dayLabels.forEach(d => {
+        const dh = document.createElement('div');
+        dh.className = 'day-header';
+        dh.innerText = d;
+        gridContainer.appendChild(dh);
+    });
+
+    // Saatleri ve Kutuları Oluştur
+    hours.forEach(time => {
+        // 1. Saat Etiketi (Sol taraf)
+        const timeLabel = document.createElement('div');
+        timeLabel.className = 'time-label';
+        timeLabel.innerText = time;
+        gridContainer.appendChild(timeLabel);
+
+        // 2. Gün Kutucukları
+        days.forEach(day => {
+            const btn = document.createElement('div');
+            btn.className = 'slot-btn';
+            
+            // Veri özelliklerini ekle
+            btn.dataset.day = day;
+            btn.dataset.time = time;
+            
+            // Tıklama Olayı (Kırmızı/Beyaz yapma)
+            btn.onclick = function() {
+                this.classList.toggle('unavailable');
+            };
+
+            gridContainer.appendChild(btn);
+        });
+    });
+
+    // Dışarı tıklayınca kapatma
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+}
+
+// Modalı Açan Fonksiyon (HTML'den çağrılıyor: onclick="openModal(...)")
+window.openModal = function(name) {
+    if(modalTitle) modalTitle.innerText = `${name} - Müsaitlik Ayarları`;
+    
+    // Her açılışta grid'i sıfırla (temizle)
+    const slots = document.querySelectorAll('.slot-btn');
+    if(slots) {
+        slots.forEach(btn => btn.classList.remove('unavailable'));
+    }
+    
+    if(modal) modal.classList.add('active');
+}
+
+// Modalı Kapatan Fonksiyon
+window.closeModal = function() {
+    if(modal) modal.classList.remove('active');
 }

@@ -284,5 +284,192 @@
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+}
+
+/* ----------------------------------------------------- */
+/* --- YENİ EKLENEN ÖZELLİK: MÜSAİTLİK (AVAILABILITY) --- */
+/* ----------------------------------------------------- */
+
+/* Tablodaki Takvim Butonu */
+.btn-availability {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: var(--white);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 15px;
+}
+
+.btn-availability:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: #EFF6FF; /* Hafif mavi hover */
+}
+
+/* Modal Arka Planı (Overlay) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+/* Modal Kutusu */
+.modal-box {
+    background: var(--white);
+    width: 650px;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Modal Header */
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--secondary-color, #1e293b);
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+/* Modal Body & Grid */
+.modal-body {
+    padding: 24px;
+}
+
+.helper-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: 70px repeat(5, 1fr); /* Saat + 5 Gün */
+    gap: 8px;
+}
+
+.day-header {
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-muted);
+    padding-bottom: 8px;
+}
+
+.time-label {
+    text-align: right;
+    padding-right: 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    align-self: center;
+}
+
+/* Kutucuklar (Slots) */
+.slot-btn {
+    height: 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slot-btn:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+/* Kırmızı (Dolu/Yasaklı) Durum */
+.slot-btn.unavailable {
+    background: #FEF2F2;
+    border-color: #EF4444;
+    color: #991B1B;
+}
+
+/* Yasak İkonu (After elementi ile) */
+.slot-btn.unavailable::after {
+    content: '\f05e'; /* FontAwesome Ban Icon */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    font-size: 1rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 20px 24px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    background: #f8fafc;
+}
+
+.btn-cancel {
+    background: var(--white);
+    border: 1px solid #e2e8f0;
+    color: var(--text-muted);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.btn-save {
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.btn-save:hover {
+    opacity: 0.9;
 }

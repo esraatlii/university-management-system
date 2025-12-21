@@ -1,174 +1,156 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dekan Paneli | Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../css/dean.css"> 
+    <title>Halls</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/halls.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 </head>
 <body>
-    <div class="d-flex">
-        <div class="sidebar-menu d-flex flex-column">
-            <div class="menu-header text-center p-3 fs-5 fw-bold">Mühendislik Fakültesi</div>
-            <div class="list-group list-group-flush pt-2">
-                <a href="dean_dashboard.html" class="list-group-item menu-item active d-flex align-items-center">
-                    <i class="fas fa-eye me-3"></i> Genel Bakış
-                    <span class="ms-auto"></span>
-                </a>
-                <a href="#" class="list-group-item menu-item d-flex align-items-center">
-                    <i class="fas fa-check-circle me-3"></i> Onay Bekleyenler
-                    <span class="badge bg-danger ms-auto">2</span>
-                </a>
-                <a href="#" class="list-group-item menu-item d-flex align-items-center">
-                    <i class="fas fa-list me-3"></i> Tüm Programlar
-                </a>
-                <a href="#" class="list-group-item menu-item d-flex align-items-center">
-                    <i class="fas fa-users me-3"></i> Bölümler & Temsilciler
-                </a>
-                <a href="halls.html" class="list-group-item menu-item d-flex align-items-center">
-                    <i class="fas fa-chalkboard me-3"></i> Oda/Sınıf Durumları
-                </a>
+    <div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">Kampüs Yön.</div>
+        <nav class="menu-items">
+          <a href="#" class="active"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
+          
+          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanici Ekle</span></a>
+          
+          <a href="department_identification.html"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
+          
+          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
+          
+          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış yap</span></a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="header">
+          <h3>Kullanıcı Yönetimi</h3>
+          <div class="logoutSection">
+            <div class="user-profile-circle">
+              SB
             </div>
-             <div class="mt-auto p-3 border-top">
-                <a href="#" class="btn btn-outline-secondary w-100"><i class="fas fa-sign-out-alt me-2"></i> Çıkış Yap</a>
-            </div>
-        </div>
-        
-        <div id="page-content-wrapper" class="flex-grow-1">
-            <nav class="navbar navbar-light bg-white border-bottom p-3">
-                <div class="container-fluid">
-                    <h4 class="mb-0">Dashboard</h4>
-                    <div class="d-flex align-items-center">
-                        <span class="me-3 text-end">
-                            Prof. Dr. Kemal Sayar<br>
-                            <small class="text-muted">Dekan</small>
-                        </span>
-                        <div class="profile-icon">
-                            KS
-                        </div>
+          
+          <div class="user-info">
+            <span class="userInfoName">Görevli İsmi</span>
+            <span class="userInfoRole">Rolü</span>
+          </div>
+          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+          </div>
+        </header>
+
+    <div class="content-body">
+            <div class="addClassRoom">
+            <form class="addClassRoomForm">
+                <h3 class="form-titles">Add New Classroom / Hall</h3>
+                <label class="form-label">Define a new classroom or hall with its specifications</label>
+                <div class="form-row three-columns">
+                    <div class="form-group">
+                        <label>Hall Name</label>
+                        <input type="text" placeholder="e.g., Engineering Hall A-10">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Capacity</label>
+                        <input type="number" placeholder="e.g., 50">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select aria-placeholder="Select type">
+                            <option>Classroom</option>
+                            <option>Hall</option>
+                            <option>Lab</option>
+                        </select>
                     </div>
                 </div>
-            </nav>
-
-            <div class="container-fluid p-4 main-content-bg">
-                
-                <h2 class="mb-1">Hoş geldiniz Sayın Dekanım</h2>
-                <p class="text-muted mb-4">2025-2026 Güz Dönemi ders programı onay süreçleri aşağıdadır.</p>
-
-                <div class="row g-4 mb-5">
-                    
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card p-3 summary-card h-100">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-building fa-2x icon-total me-3"></i>
-                                <div>
-                                    <div class="text-muted small">Toplam Bölüm</div>
-                                    <div class="fs-4 fw-bold">6</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card p-3 summary-card h-100">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-check-circle fa-2x icon-approved me-3"></i>
-                                <div>
-                                    <div class="text-muted small">Onaylanan</div>
-                                    <div class="fs-4 fw-bold">3</div>
-                                    <small class="text-muted">3 Bölüm hazır.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card p-3 summary-card h-100">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-clock fa-2x icon-pending me-3"></i>
-                                <div>
-                                    <div class="text-muted small">Onay Bekleyen</div>
-                                    <div class="fs-4 fw-bold">2</div>
-                                    <small class="text-muted">İncelemeniz bekleniyor.</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-3 col-md-6">
-                        <div class="card p-3 summary-card h-100">
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-file-alt fa-2x icon-draft me-3"></i>
-                                <div>
-                                    <div class="text-muted small">Taslak Aşamasında</div>
-                                    <div class="fs-4 fw-bold">1</div>
-                                    <small class="text-muted">Henüz gönderilmedi.</small>
-                                </div>
-                            </div>
-                        </div>
+                <div class="facilities">
+                    <h4>Facilities & Amenities</h4>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> Projector</label>
+                        <label><input type="checkbox"> Whiteboard</label>
+                        <label><input type="checkbox"> Air Conditioning</label>
+                        <label><input type="checkbox"> Computers</label>
                     </div>
                 </div>
 
-                <div class="card shadow p-4">
-                    <h4 class="mb-4">Bölüm Ders Programı Durumları</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead>
-                                <tr class="text-muted small text-uppercase">
-                                    <th>Bölüm Adı</th>
-                                    <th>Temsilci</th>
-                                    <th>Son Güncelleme</th>
-                                    <th>Durum</th>
-                                    <th>İşlem</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>**Bilgisayar Mühendisliği**</td>
-                                    <td>Arş. Gör. Ali Veli</td>
-                                    <td>2 saat önce</td>
-                                    <td><span class="status-badge-orange">Onay Bekliyor</span></td>
-                                    <td><button class="btn btn-primary btn-sm">İncele</button></td>
-                                </tr>
-                                <tr>
-                                    <td>**Elektrik-Elektronik Mühendisliği**</td>
-                                    <td>Dr. Öğr. Üyesi Ayşe Demir</td>
-                                    <td>5 saat önce</td>
-                                    <td><span class="status-badge-green">Onaylandı</span></td>
-                                    <td><button class="btn btn-outline-secondary btn-sm" disabled>İncele</button></td>
-                                </tr>
-                                 <tr>
-                                    <td>**Makine Mühendisliği**</td>
-                                    <td>Arş. Gör. Mehmet Kaya</td>
-                                    <td>1 gün önce</td>
-                                    <td><span class="status-badge-green">Onaylandı</span></td>
-                                    <td><button class="btn btn-outline-secondary btn-sm" disabled>İncele</button></td>
-                                </tr>
-                                <tr>
-                                    <td>**İnşaat Mühendisliği**</td>
-                                    <td>Dr. Öğr. Üyesi Fatma Yılmaz</td>
-                                    <td>3 saat önce</td>
-                                    <td><span class="status-badge-orange">Onay Bekliyor</span></td>
-                                    <td><button class="btn btn-primary btn-sm">İncele</button></td>
-                                </tr>
-                                <tr>
-                                    <td>**Endüstri Mühendisliği**</td>
-                                    <td>Arş. Gör. Can Özkan</td>
-                                    <td>2 gün önce</td>
-                                    <td><span class="status-badge-green">Onaylandı</span></td>
-                                    <td><button class="btn btn-outline-secondary btn-sm" disabled>İncele</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="formBtn">
+                    <button type="submit">
+                       <i class="fa-solid fa-plus"></i>Add Classroom
+                    </button>
+                </div>
+            </form>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <div>
+                    <h3>Existing Classrooms & Halls</h3>
+                    <p>2 classroom defined</p>
                     </div>
+                    <div>
+                        <button class="exportBtn">Export</button>
+                        <button class="filterBtn">Filter</button>
+                    </div>
+                </div>
+            <table class="classroom-table">
+                <thead>
+                    <tr>
+                        <th>classroom name</th>
+                        <th>type</th>
+                        <th>capacity</th>
+                        <th>facilities</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-medium">Engineering Hall A-101</td>
+                        <td><span class="badge badge-purple">Lecture Hall</span></td>
+                        <td>120 Students</td>
+                        <td class="tags">
+                            <span>Projector</span><span>AC</span><span>Whiteboard</span>
+                        </td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
+                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
+                                <i class="fa-regular fa-trash-can" title="Sil"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Computer Lab B-205</td>
+                        <td><span class="badge badge-purple">Computer Lab</span></td>
+                        <td>40 Students</td>
+                        <td>
+                            <span>Project</span><span>AC</span><span>Computers</span>
+                        </td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
+                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
+                                <i class="fa-regular fa-trash-can" title="Sil"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="table-bottom">
+                <p>Showing 1 to 8 of 8 results</p>
+                <div class="paginationButtons">
+                    <button class="prevBtn">Previous</button>
+                    <button class="numBtns">1</button>
+                    <button class="numBtns">2</button>
+                    <button class="nextBtn">Next</button>
                 </div>
 
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/halls.js"></script>
 </body>
 </html>
-                                
