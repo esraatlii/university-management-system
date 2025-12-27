@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from backend.database import engine
 from backend import models
 from backend.routers import (
@@ -7,6 +8,13 @@ from backend.routers import (
 
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Frontend'in (file:// veya localhost) erişimine izin verir
+    allow_credentials=True,
+    allow_methods=["*"], # GET, POST vb. tüm metodlara izin verir
+    allow_headers=["*"], # Tüm başlık bilgilerine izin verir
+)
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -29,7 +37,5 @@ app.include_router(instructor_unavailability.router)
 
 @app.get("/")
 def read_root():
-    return {"Message": "FastAPI is up and running"}
-
-
-
+    return {"Message": "FastAPI is up and running"},
+ 
