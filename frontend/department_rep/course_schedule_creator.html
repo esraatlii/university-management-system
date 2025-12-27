@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ders Programı Oluşturucu</title>
+    <link rel="stylesheet" href="../css/course_schedule_creator.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-left">
+            <a href="rep_dashboard.html" class="back-link">← Geri Dön</a>
+            <span class="header-title">Ders Programı Oluşturucu</span>
+        </div>
+        <div class="header-right">
+            <div class="user-avatar">MD</div>
+        </div>
+    </header>
+
+    <div class="builder-container">
+        
+        <aside class="sidebar-left">
+            <h3>Planlanmamış Dersler</h3>
+            <div class="course-list">
+                <div class="course-card" draggable="true" data-code="CENG201" data-name="Veri Yapıları" data-instructor="Dr. Ayşe Demir" data-students="80">
+                    <div style="color:var(--primary-blue); font-weight:700;">CENG201</div>
+                    <div>Veri Yapıları</div>
+                    <div style="font-size:0.8rem; color:#666; margin-top:4px;">👤 Dr. Ayşe Demir • 👥 80 Öğr.</div>
+                </div>
+
+                <div class="course-card" draggable="true" data-code="CENG301" data-name="İşletim Sistemleri" data-instructor="Dr. Can Yıldız" data-students="65">
+                    <div style="color:var(--primary-blue); font-weight:700;">CENG301</div>
+                    <div>İşletim Sistemleri</div>
+                    <div style="font-size:0.8rem; color:#666; margin-top:4px;">👤 Dr. Can Yıldız • 👥 65 Öğr.</div>
+                </div>
+
+                <div class="course-card" draggable="true" data-code="MAT101" data-name="Matematik I" data-instructor="Dr. Mehmet Öz" data-students="90">
+                    <div style="color:var(--primary-blue); font-weight:700;">MAT101</div>
+                    <div>Matematik I</div>
+                    <div style="font-size:0.8rem; color:#666; margin-top:4px;">👤 Dr. Mehmet Öz • 👥 90 Öğr.</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="schedule-main">
+            <div class="schedule-grid">
+                <div class="grid-head-cell">Saat</div>
+                <div class="grid-head-cell">Pazartesi</div>
+                <div class="grid-head-cell">Salı</div>
+                <div class="grid-head-cell">Çarşamba</div>
+                <div class="grid-head-cell">Perşembe</div>
+                <div class="grid-head-cell">Cuma</div>
+
+                <div class="time-slot">08:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="08:30"></div><div class="grid-cell" data-day="Tue" data-time="08:30"></div><div class="grid-cell" data-day="Wed" data-time="08:30"></div><div class="grid-cell" data-day="Thu" data-time="08:30"></div><div class="grid-cell" data-day="Fri" data-time="08:30"></div>
+
+                <div class="time-slot">09:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="09:30"></div><div class="grid-cell" data-day="Tue" data-time="09:30"></div><div class="grid-cell" data-day="Wed" data-time="09:30"></div><div class="grid-cell" data-day="Thu" data-time="09:30"></div><div class="grid-cell" data-day="Fri" data-time="09:30"></div>
+
+                <div class="time-slot">10:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="10:30"></div><div class="grid-cell" data-day="Tue" data-time="10:30"></div><div class="grid-cell" data-day="Wed" data-time="10:30"></div><div class="grid-cell" data-day="Thu" data-time="10:30"></div><div class="grid-cell" data-day="Fri" data-time="10:30"></div>
+
+                <div class="time-slot">11:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="11:30"></div><div class="grid-cell" data-day="Tue" data-time="11:30"></div><div class="grid-cell" data-day="Wed" data-time="11:30"></div><div class="grid-cell" data-day="Thu" data-time="11:30"></div><div class="grid-cell" data-day="Fri" data-time="11:30"></div>
+
+                <div class="time-slot">12:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="12:30"></div><div class="grid-cell" data-day="Tue" data-time="12:30"></div><div class="grid-cell" data-day="Wed" data-time="12:30"></div><div class="grid-cell" data-day="Thu" data-time="12:30"></div><div class="grid-cell" data-day="Fri" data-time="12:30"></div>
+
+                <div class="time-slot">13:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="13:30"></div><div class="grid-cell" data-day="Tue" data-time="13:30"></div><div class="grid-cell" data-day="Wed" data-time="13:30"></div><div class="grid-cell" data-day="Thu" data-time="13:30"></div><div class="grid-cell" data-day="Fri" data-time="13:30"></div>
+
+                <div class="time-slot">14:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="14:30"></div><div class="grid-cell" data-day="Tue" data-time="14:30"></div><div class="grid-cell" data-day="Wed" data-time="14:30"></div><div class="grid-cell" data-day="Thu" data-time="14:30"></div><div class="grid-cell" data-day="Fri" data-time="14:30"></div>
+
+                <div class="time-slot">15:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="15:30"></div><div class="grid-cell" data-day="Tue" data-time="15:30"></div><div class="grid-cell" data-day="Wed" data-time="15:30"></div><div class="grid-cell" data-day="Thu" data-time="15:30"></div><div class="grid-cell" data-day="Fri" data-time="15:30"></div>
+
+                <div class="time-slot">16:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="16:30"></div><div class="grid-cell" data-day="Tue" data-time="16:30"></div><div class="grid-cell" data-day="Wed" data-time="16:30"></div><div class="grid-cell" data-day="Thu" data-time="16:30"></div><div class="grid-cell" data-day="Fri" data-time="16:30"></div>
+
+                <div class="time-slot">17:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="17:30"></div><div class="grid-cell" data-day="Tue" data-time="17:30"></div><div class="grid-cell" data-day="Wed" data-time="17:30"></div><div class="grid-cell" data-day="Thu" data-time="17:30"></div><div class="grid-cell" data-day="Fri" data-time="17:30"></div>
+
+                <div class="time-slot">18:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="18:30"></div><div class="grid-cell" data-day="Tue" data-time="18:30"></div><div class="grid-cell" data-day="Wed" data-time="18:30"></div><div class="grid-cell" data-day="Thu" data-time="18:30"></div><div class="grid-cell" data-day="Fri" data-time="18:30"></div>
+
+                <div class="time-slot">19:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="19:30"></div><div class="grid-cell" data-day="Tue" data-time="19:30"></div><div class="grid-cell" data-day="Wed" data-time="19:30"></div><div class="grid-cell" data-day="Thu" data-time="19:30"></div><div class="grid-cell" data-day="Fri" data-time="19:30"></div>
+
+                <div class="time-slot">20:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="20:30"></div><div class="grid-cell" data-day="Tue" data-time="20:30"></div><div class="grid-cell" data-day="Wed" data-time="20:30"></div><div class="grid-cell" data-day="Thu" data-time="20:30"></div><div class="grid-cell" data-day="Fri" data-time="20:30"></div>
+
+                <div class="time-slot">21:30</div>
+                <div class="grid-cell" data-day="Mon" data-time="21:30"></div><div class="grid-cell" data-day="Tue" data-time="21:30"></div><div class="grid-cell" data-day="Wed" data-time="21:30"></div><div class="grid-cell" data-day="Thu" data-time="21:30"></div><div class="grid-cell" data-day="Fri" data-time="21:30"></div>
+            </div>
+        </main>
+
+        <aside class="sidebar-right">
+            <h3>Dikkat Gerekenler</h3>
+            <div id="issues-container" style="margin-top:10px;">
+                <p style="color:#999; font-size:0.8rem;">Henüz bir sorun yok.</p>
+            </div>
+        </aside>
+
+    </div>
+
+    <div class="modal-overlay" id="roomModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Sınıf Ata</h3>
+                <span class="close-btn" onclick="closeModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <p id="modalCourseInfo" style="margin-bottom:15px; color:#666;"></p>
+                <div style="margin-bottom:10px; font-weight:600; font-size:0.9rem;">Önerilen Sınıflar:</div>
+                <ul class="room-suggestion-list" id="roomList">
+                    </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/course_schedule_creator.js"></script>
+</body>
+</html>

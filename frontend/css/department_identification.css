@@ -1,0 +1,306 @@
+/* --- Header / Çıkış Bölümü --- */
+.logoutSection {
+    display: flex;
+    align-items: center;
+}
+
+.logoutSection a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    margin-right: 20px;
+    margin-left: 16px;
+}
+
+.userInfoName {
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+.userInfoRole {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.user-profile-circle {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: #DBEAFE;
+    color: #2563EB;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* --- Sidebar Menu Düzeltmesi --- */
+/* İkon ve yazı arasındaki boşluğun çalışması için flex şart */
+.menu-items a {
+    display: flex;
+    align-items: center;
+    gap: 16px; 
+}
+
+/* --- Karşılama Bölümü --- */
+.welcome-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.welcome-section h3 {
+    font-size: 24px;
+    color: var(--secondary-color);
+}
+
+.welcome-section p {
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+/* --- Form Bölümü --- */
+.addNewDepartmentForm {
+    /* height: 100vh; SİLİNDİ - Sayfa düzenini bozan kod buydu */
+    height: auto; /* İçerik kadar uzasın */
+    background: var(--white);
+    padding: 25px;
+    margin: 0 0 30px 0;
+    border-radius: 12px; /* Köşeleri biraz daha yumuşattım */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.form-titles {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.form-row {
+    display: grid;
+    gap: 20px;
+}
+
+.form-row.two-columns {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.addNewDepartmentForm input {
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    background: #f9fafb; /* Hafif gri arka plan */
+    outline: none;
+    transition: all 0.2s;
+}
+
+.addNewDepartmentForm input:focus {
+    border-color: var(--primary-color);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end; /* Butonu sağa aldım, genelde formlarda sağda olur */
+}
+
+.addNewDepartmentBtn {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.addNewDepartmentBtn:hover {
+    opacity: 0.9;
+}
+
+/* --- Tablo Bölümü --- */
+.main-content {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px; /* İçeriğin kenarlara yapışmaması için */
+}
+
+.content-body {
+    width: 100%;
+}
+
+.table-container {
+    background: var(--white);
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Köşelerin düzgün durması için */
+}
+
+.table-header {
+    padding: 20px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.table-header h3 {
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.table-header p {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.department-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.department-table thead {
+    background: #f9fafb;
+}
+
+.department-table th {
+    text-align: left;
+    padding: 16px 20px;
+    color: var(--secondary-color);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.department-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #374151;
+    vertical-align: middle;
+}
+
+.department-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.department-table tbody tr:hover {
+    background-color: #f9fafb; /* Tabloda üzerine gelince renk değişimi */
+}
+
+/* Aksiyon İkonları */
+.actions {
+    text-align: right;
+}
+
+.action-icons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.action-icons i {
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s;
+    font-size: 16px;
+}
+
+.action-icons i:hover {
+    color: var(--primary-color);
+}
+
+.action-icons i.fa-trash-can:hover {
+    color: #ef4444; /* Silme butonu kırmızı olsun */
+}
+
+/* Badge (Etiketler) */
+.badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-blue {
+    background: #DBEAFE;
+    color: #2563EB;
+}
+
+/* Tablo Altı (Pagination) */
+.table-bottom {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: var(--white);
+    border-top: 1px solid #e5e7eb;
+}
+
+.table-bottom p {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.tableButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.tableButtons button {
+    padding: 8px 14px;
+    background-color: var(--white);
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    color: var(--secondary-color);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tableButtons button:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
