@@ -15,13 +15,12 @@ def get_faculty(db: db_dependency):
 @router.post("/",response_model=schemas.FacultyOut)
 def add_faculty(data: schemas.FacultyCreate,db: db_dependency):
     name = data.name.strip()
-    faculty = db.query(models.Faculties).filter(models.Faculties.name == data.name).first()
+    faculty = db.query(models.Faculties).filter(models.Faculties.name == name).first()
     if faculty:
         raise HTTPException(status_code=400,
                             detail="Faculty already exists")
-    new_faculty = models.Faculties(
-        name=data.name,
-    )
+    new_faculty = models.Faculties(name=name)
+
     db.add(new_faculty)
     db.commit()
     db.refresh(new_faculty)

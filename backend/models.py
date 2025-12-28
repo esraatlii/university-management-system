@@ -221,7 +221,12 @@ class ScheduleEntries(Base):
     hall_id = Column(Integer, ForeignKey("halls.id"), nullable=False, index=True)
     time_slot_id = Column(Integer, ForeignKey("time_slots.id"), nullable=False, index=True)
     duration_slots = Column(Integer, nullable=True)
-    week_pattern = Column(SQLAEnum(WeekPatterns), nullable=True)
+    week_pattern = Column(
+        SQLAEnum(WeekPatterns),
+        nullable=False,
+        default=WeekPatterns.all,
+        server_default=WeekPatterns.all.value,
+    )
 
     created_by = Column(Integer,ForeignKey("users.id"), nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())

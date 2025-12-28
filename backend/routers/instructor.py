@@ -108,8 +108,8 @@ def update_instructor(id:int, patch:schemas.InstructorUpdate, db:db_dependency):
     return build_instructor_out(db, existing.id)
 
 @router.delete("/{id}",status_code=204)
-def delete_indtructor(db:db_dependency,id:int):
-    instructor = db.queray(models.Instructors).filter(models.Instructors.id == id).first()
+def delete_instructor(db:db_dependency,id:int):
+    instructor = db.query(models.Instructors).filter(models.Instructors.id == id).first()
     if not instructor:
         raise HTTPException(status_code=404, detail="Instructor not found")
     db.delete(instructor)
