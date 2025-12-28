@@ -31,22 +31,24 @@ def create_term(term:schemas.TermCreate,db: db_dependency):
     db.refresh(new_term)
     return new_term
 
-@router.put("/{id}",response_model=schemas.TermOut)
-def update_term(id: int,term: schemas.TermUpdate,db: db_dependency):
-    existing_term = db.query(models.Terms).filter(models.Terms.id == id).first()
-    if not existing_term:
-        raise HTTPException(
-            status_code=404,
-            detail="term does not exist",
-        )
-    existing_term.name = term.name
-    existing_term.start_date = term.start_date
-    existing_term.end_date = term.end_date
-    existing_term.is_active = term.is_active
+@router.patch("/{id}", response_model=schemas.TermOut)
+def update_term(id: int, term: schemas.TermUpdate, db: db_dependency):
+    existing = db.query(models.Terms).filter(models.Terms.id == id).first()
+    if not existing:
+        raise HTTPException(status_code=404, detail="Term not found.")
+
+    updates = term.model_dump(exclude_unset=True)
+
+    # boş body gelirse değişiklik yapmadan mevcut term'i döndür
+    if not updates:
+        return existing
+
+    for k, v in updates.items():
+        setattr(existing, k, v)
 
     db.commit()
-    db.refresh(existing_term)
-    return existing_term
+    db.refresh(existing)
+    return existing
 
 @router.delete("/{id}",response_model=schemas.Message)
 def delete_term(id: int,db: db_dependency):

@@ -282,6 +282,7 @@ class ProgramClassOut(ProgramClassBase):
     id: int
     department_name: str | None = None
     term_name: str | None = None
+    group_letter: str
     model_config = ConfigDict(from_attributes=True)
 
 
@@ -300,8 +301,12 @@ class TimeSlotUpdate(BaseModel):
     start_time: time | None = None
     end_time: time | None = None
 
-class TimeSlotOut(TimeSlotBase):
+class TimeSlotOut(BaseModel):
     id: int
+    day_of_week: int = Field(..., ge=1, le=7)
+    day_name: str
+    start_time: time
+    end_time: time
     model_config = ConfigDict(from_attributes=True)
 
 
