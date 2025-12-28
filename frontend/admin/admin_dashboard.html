@@ -94,6 +94,7 @@
                     <th>Bölüm</th>
                     <th>Kayıt Tarihi</th>
                     <th>Durum</th>
+                    <th style="text-align: center;">Uygunluk</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -105,6 +106,11 @@
                     <td class="department">Bilgisayar Müh.</td>
                     <td class="registerDate">06.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Ahmet Yılmaz')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>Zeynep Kaya</td>
@@ -112,6 +118,11 @@
                     <td class="department">Mühendislik Fakültesi</td>
                     <td class="registerDate">05.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Zeynep Kaya')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>Mehmet Demir</td>
@@ -121,6 +132,11 @@
                     <td class="department">Elektrik Müh.</td>
                     <td class="registerDate">04.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Mehmet Demir')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>Ayşe Şahin</td>
@@ -128,6 +144,11 @@
                     <td class="department">Mimarlık Fakültesi</td>
                     <td class="registerDate">03.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Ayşe Şahin')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>Can Öztürk</td>
@@ -135,6 +156,11 @@
                     <td class="department">Sistem Yönetimi</td>
                     <td class="registerDate">02.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Can Öztürk')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                   <tr>
                     <td>Elif Arslan</td>
@@ -144,6 +170,11 @@
                     <td class="department">Makine Müh.</td>
                     <td class="registerDate">01.12.2025</td>
                     <td><span class="badge badge-green">Aktif</span></td>
+                    <td style="text-align: center;">
+                        <button class="btn-availability" onclick="openModal('Elif Arslan')">
+                            <i class="fa-regular fa-calendar-xmark"></i>
+                        </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -164,5 +195,26 @@
         </div>
       </main>
     </div>
+
+    <div class="modal-overlay" id="availabilityModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalTitle">Müsaitlik Ayarları</h3>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <span class="helper-text">Hocanın <b>müsait olmadığı</b> saatleri işaretleyin. Kırmızı alanlar yasaklı olacaktır.</span>
+                
+                <div class="schedule-grid" id="gridContainer">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">İptal</button>
+                <button class="btn-save" onclick="closeModal()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
   </body>
 </html>

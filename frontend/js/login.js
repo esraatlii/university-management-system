@@ -1,6 +1,7 @@
-// js/login.js - BACKEND OLMADAN ÇALIŞAN VERSİYON (MOCK)
+// backend adresini tanımlayalım
+const API_URL = "http://127.0.0.1:8001/api";
 
-document.getElementById('loginForm').addEventListener('submit', function(e) {
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault(); // Sayfanın yenilenmesini engelle
 
     const email = document.getElementById('email').value.trim();
@@ -8,60 +9,50 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
     const errorMsg = document.getElementById('error-message');
     const loginBtn = document.querySelector('.login-btn');
 
-    // Butona basıldığını hissettirelim
-    loginBtn.innerText = "Kontrol Ediliyor...";
+    // Görsel geri bildirim
+    loginBtn.innerText = "Giriş Yapılıyor...";
     loginBtn.disabled = true;
     errorMsg.style.display = 'none';
 
-    // 1 SANİYE BEKLEME (Gerçekçi olsun diye)
-    setTimeout(() => {
-        let userRole = null;
-        let redirectUrl = "";
-        let userName = "";
-
-        // --- BURASI SENİN "SAHTE" VERİTABANIN ---
-        // Şifre hepsinde "123456" olsun kolaylık olsun.
-        
-        if (email === "admin@uni.edu.tr" && password === "123456") {
-            userRole = "admin";
-            userName = "Sistem Yöneticisi";
-            redirectUrl = "admin/admin_dashboard.html";
-        } 
-        else if (email === "dekan@uni.edu.tr" && password === "123456") {
-            userRole = "dean";
-            userName = "Prof. Dr. Dekan";
-            redirectUrl = "dean/dean_dashboard.html";
-        } 
-        else if (email === "bolum@uni.edu.tr" && password === "123456") {
-            userRole = "department_rep";
-            userName = "Bölüm Başkanı";
-            redirectUrl = "department_rep/rep_dashboard.html";
-        }
-
-        // --- KONTROL SONUCU ---
-        
-        if (userRole) {
-            // BAŞARILI: Kullanıcıyı tarayıcı hafızasına (localStorage) kaydet
-            const user = {
-                id: 99,
-                full_name: userName,
+    try {
+        // Backend'deki /api/auth/login endpoint'ine istek atıyoruz [cite: 13, 14]
+        const response = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 email: email,
-                role: userRole
-            };
+                password: password
+            })
+        });
+
+        if (response.ok) {
+            const user = await response.json(); // Backend'den UserOut şeması döner 
             
+            // Başarılı: Kullanıcı bilgilerini tarayıcı hafızasına kaydet
             localStorage.setItem('user', JSON.stringify(user));
-            console.log("Giriş Başarılı:", user);
-
-            // Yönlendir
-            window.location.href = redirectUrl;
-
+            
+            // Role göre yönlendirme mantığı 
+            if (user.role === "admin") {
+                window.location.href = "admin/admin_dashboard.html";
+            } else if (user.role === "dean") {
+                window.location.href = "dean/dean_dashboard.html";
+            } else if (user.role === "department_rep") {
+                window.location.href = "department_rep/rep_dashboard.html";
+            }
         } else {
-            // HATA: Yanlış email veya şifre
+            // Hatalı giriş (401 vb.) 
+            const errorData = await response.json();
+            errorMsg.innerText = errorData.detail || "Giriş başarısız.";
             errorMsg.style.display = 'block';
-            errorMsg.innerText = "Hatalı E-posta veya Şifre! (Şifre: 123456)";
-            loginBtn.innerText = "Giriş Yap";
-            loginBtn.disabled = false;
         }
-
-    }, 800); // 0.8 saniye bekle
+    } catch (error) {
+        console.error("Bağlantı hatası:", error);
+        errorMsg.innerText = "Sunucuya bağlanılamadı. Lütfen backend'in çalıştığından emin olun.";
+        errorMsg.style.display = 'block';
+    } finally {
+        loginBtn.innerText = "Giriş Yap";
+        loginBtn.disabled = false;
+    }
 });
