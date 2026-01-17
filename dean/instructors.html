@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademisyen Yönetimi - Dekanlık</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dean.css">
+    <link rel="stylesheet" href="../css/admin.css">
+
+    <style>
+        /* Modal & Grid Stilleri (Garantili Çalışması İçin) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+        .modal-overlay.active { display: flex !important; }
+        .modal-box { background: #fff; width: 90%; max-width: 500px; border-radius: 12px; box-shadow: 0 20px 25px rgba(0,0,0,0.2); overflow: hidden; animation: slideDown 0.3s; }
+        @keyframes slideDown { from {transform: translateY(-20px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+        .modal-header { padding: 15px 20px; background: #f9fafb; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 20px; }
+        .modal-footer { padding: 15px 20px; background: #f9fafb; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+        .form-row.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .btn-save { background: #2563EB; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .btn-cancel { background: white; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+        /* Grid */
+        .schedule-grid { display: grid; grid-template-columns: 60px repeat(5, 1fr); gap: 5px; margin-top: 15px; }
+        .day-header { text-align: center; font-weight: 600; font-size: 0.8rem; }
+        .time-label { text-align: right; padding-right: 5px; font-size: 0.8rem; align-self: center; }
+        .slot-btn { height: 35px; border: 1px solid #eee; background: #fff; cursor: pointer; }
+        .slot-btn.unavailable { background-color: #fee2e2; border-color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    
+    <aside class="sidebar">
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+        <nav class="menu">
+            <a href="dean_dashboard.html" class="menu-item"><i class="fa-solid fa-border-all"></i> Genel Bakış</a>
+            <a href="tumprogramlar.html" class="menu-item"><i class="fa-solid fa-book-open"></i> Tüm Programlar</a>
+            <a href="halls.html" class="menu-item"><i class="fa-solid fa-building"></i> Sınıflar</a>
+            <a href="instructors.html" class="menu-item active"><i class="fa-solid fa-users"></i> Akademisyenler</a>
+        </nav>
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item"><i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap</a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <h2 class="page-title">Akademisyen Yönetimi</h2>
+            <div class="header-right">
+                <div class="user-profile">
+                    <div class="avatar">D</div>
+                    <div class="user-info">
+                        <span class="name" id="headerUserName">Dekan</span>
+                        <span class="role">Yönetici</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-body">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div>
+                    <h3 style="font-size: 1.2rem; color: #111;">Tüm Akademisyenler</h3>
+                    <p style="color: #666; font-size: 0.9rem;">Fakülte genelindeki tüm hocaları yönetebilirsiniz.</p>
+                </div>
+                <button class="btn-save" id="openModalBtn">
+                    <i class="fa-solid fa-plus"></i> Yeni Hoca Ekle
+                </button>
+            </div>
+
+            <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead style="background: #f9fafb; border-bottom: 1px solid #eee;">
+                        <tr>
+                            <th style="padding: 15px; text-align: left; color: #555;">UNVAN</th>
+                            <th style="padding: 15px; text-align: left; color: #555;">AD SOYAD</th>
+                            <th style="padding: 15px; text-align: left; color: #555;">BÖLÜM</th>
+                            <th style="padding: 15px; text-align: left; color: #555;">DURUM</th>
+                            <th style="padding: 15px; text-align: right; color: #555;">İŞLEMLER</th>
+                        </tr>
+                    </thead>
+                    <tbody id="instructorsTableBody">
+                        <tr><td colspan="5" style="text-align:center; padding:20px;">Yükleniyor...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div class="modal-overlay" id="addInstructorModal">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>Yeni Akademisyen Oluştur</h3>
+            <button class="close-btn" onclick="closeModal('addInstructorModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <form id="addInstructorForm">
+                
+                <div class="form-group">
+                    <label>Fakülte</label>
+                    <select id="facultySelect">
+                        <option value="">Fakülte Seçiniz...</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Bölüm</label>
+                    <select id="deptSelect" required>
+                        <option value="">Önce Fakülte Seçiniz</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Unvan</label>
+                    <select id="titleSelect" required>
+                        <option value="Prof. Dr.">Prof. Dr.</option>
+                        <option value="Doç. Dr.">Doç. Dr.</option>
+                        <option value="Dr. Öğr. Üyesi">Dr. Öğr. Üyesi</option>
+                        <option value="Öğr. Gör.">Öğr. Gör.</option>
+                        <option value="Arş. Gör.">Arş. Gör.</option>
+                    </select>
+                </div>
+
+                <div class="form-row two-columns">
+                    <div class="form-group">
+                        <label>Ad</label>
+                        <input type="text" id="firstNameInput" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Soyad</label>
+                        <input type="text" id="lastNameInput" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="text" id="emailInput" placeholder="ornek@dpu.edu.tr">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal('addInstructorModal')">İptal</button>
+                    <button type="submit" class="btn-save">Kaydet ve Devam Et</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="availabilityModal">
+    <div class="modal-box" style="max-width: 800px;">
+        <div class="modal-header">
+            <h3>Müsaitlik: <span id="availabilityInstructorName"></span></h3>
+            <button class="close-btn" onclick="closeModal('availabilityModal')">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:#666;">Hocanın ders veremeyeceği saatleri kırmızı yapınız.</p>
+            <div class="schedule-grid" id="availabilityGrid"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('availabilityModal')">Kapat</button>
+            <button class="btn-save" onclick="saveAvailability()">Güncelle</button>
+        </div>
+    </div>
+</div>
+
+<script src="../js/dean_instructors.js"></script>
+
+</body>
+</html>

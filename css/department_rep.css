@@ -400,3 +400,78 @@ body {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .bottom-grid { grid-template-columns: 1fr; }
 }
+/* --- MODAL (PENCERE) STİLLERİ --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    display: none; /* Gizli başlar */
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+}
+
+.modal-overlay.active {
+    display: flex !important; /* JS active ekleyince görünür */
+}
+
+.modal-box {
+    background: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    padding: 15px 20px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h3 { font-size: 1.1rem; margin: 0; color: #111; }
+
+.modal-body { padding: 20px; }
+.modal-footer {
+    padding: 15px 20px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+
+/* FORM STİLLERİ */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+.form-group input, .form-group select {
+    width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; outline: none;
+}
+.form-row.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* BUTONLAR */
+.btn-save { background: #2563EB; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+.btn-cancel { background: white; border: 1px solid #ddd; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
+
+/* GRID (TAKVİM) */
+.schedule-grid { display: grid; grid-template-columns: 60px repeat(5, 1fr); gap: 5px; margin-top: 10px; }
+.day-header { text-align: center; font-weight: 600; font-size: 0.8rem; }
+.time-label { text-align: right; padding-right: 5px; font-size: 0.8rem; align-self: center; }
+.slot-btn { height: 35px; border: 1px solid #eee; background: #fff; cursor: pointer; }
+.slot-btn:hover { background: #f0f0f0; }
+.slot-btn.unavailable { background-color: #fee2e2; border-color: #ef4444; }

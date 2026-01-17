@@ -1,48 +1,41 @@
-/*Header Section*/
-.logoutSection {
-    display: flex;
-    align-items: center; /* Dikey ortalama eklendi */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* HEADER */
+.main-content {
+    margin-left: 260px;
+    flex: 1;
+    padding: 1.5rem 2.5rem;
 }
-.logoutSection a{
+.top-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-}
-.user-info{
-    display: flex;
-    flex-direction: column;
-    text-align: right;
-    margin-right: 20px; /* Biraz daraltıldı */
-    margin-left: 16px;
-}
-.userInfoName{
-    font-weight: 500;
-}
-.userInfoRole{
-    font-size: 14px; /* Font biraz küçültüldü */
-    font-weight: 500;
-    color: var(--text-muted);
-}
-.user-profile-circle{
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: #DBEAFE;
-    color: #2563EB;
-    font-weight: 600;
+    margin-bottom: 2.5rem;
 }
 
-/* Sidebar Menu */
-.menu-items a{
-    display: flex; /* EKLENDİ: Gap'in çalışması için şart */
-    align-items: center; /* Dikey ortalama */
-    gap: 16px;
+.page-title { font-size: 1.25rem; font-weight: 700; color: #111827; }
+
+.header-right { display: flex; align-items: center; gap: 24px; }
+
+.notification-box { position: relative; font-size: 1.2rem; color: #6B7280; cursor: pointer; }
+.notification-box .dot {
+    position: absolute; top: -2px; right: -2px;
+    width: 8px; height: 8px; background: #EF4444; border-radius: 50%;
+    border: 1px solid white;
 }
+
+.user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.avatar {
+    width: 40px; height: 40px; background: #2563EB; color: white;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 0.9rem;
+}
+.user-info { display: flex; flex-direction: column; align-items: flex-end; }
+.user-info .name { font-size: 0.9rem; font-weight: 600; color: #111827; }
+.user-info .role { font-size: 0.75rem; color: #6B7280; }
+.user-profile i { font-size: 0.8rem; color: #9CA3AF; }
+
+.page-title { font-size: 1.25rem; font-weight: 700; color: #111827; }
+
 
 /*----------------------- Form section -----------------------------*/
 .userAdd-form-container{

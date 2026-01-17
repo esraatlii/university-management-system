@@ -6,83 +6,89 @@
     <title>Admin Paneli</title>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/admin.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <div class="dashboard-container">
       <aside class="sidebar">
-        <div class="sidebar-header">Kampüs Yön.</div>
-        <nav class="menu-items">
-          <a href="#" class="active"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
-          
-          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanici Ekle</span></a>
-          
-          <a href="department_identification.html"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
-          
-          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
-          
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış yap</span></a>
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="admin_dashboard.html" class="menu-item active">
+                <i class="fa-solid fa-user-group"></i> Kullanıcı Listesi
+            </a>
+            <a href="user_add.html" class="menu-item">
+                <i class="fa-solid fa-user-plus"></i> Yeni Kullanıcı Ekle
+            </a>
+            <a href="department_identification.html" class="menu-item">
+                <i class="fa-solid fa-building"></i> Bölüm Tanımlama
+            </a>
         </nav>
-      </aside>
+
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
 
       <main class="main-content">
-        <header class="header">
-          <h3>Kullanıcı Yönetimi</h3>
-          <div class="logoutSection">
-            <div class="user-profile-circle">
-              SB
+        <header class="top-header">
+            <h2 class="page-title">Kullanıcı Yönetimi</h2>
+            <div class="header-right">
+                <div class="notification-box">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <span class="name">...</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
             </div>
-          
-          <div class="user-info">
-            <span class="userInfoName">Görevli İsmi</span>
-            <span class="userInfoRole">Rolü</span>
-          </div>
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-          </div>
         </header>
 
         <div class="content-body">
           <div class="welcome-section">
             <div class="welcome-text"> 
-              <h3>Hoş Geldin, "Görevli İsmi"</h3>
+              <h3>Hoş Geldin</h3>
               <p>Sistem paneli ve kullanıcı yönetimi özet raporu</p>
             </div>
-            <div class="date">8 Aralık 2025</div>
+            <div class="date"></div>
           </div>
 
           <div class="stats-grid">
             <div class="stat-card">
-              <div class="stat-icon stat-icon-blue">
-                <i class="fas fa-users"></i>
-              </div>
-              <p class="stat-label">Toplam Kullanici</p>
-              <h2 class="stat-number">42</h2>
+              <div class="stat-icon stat-icon-blue"><i class="fas fa-users"></i></div>
+              <p class="stat-label">Toplam Kullanıcı</p>
+              <h2 class="stat-number">-</h2>
             </div>
             <div class="stat-card">
-              <div class="stat-icon stat-icon-green">
-                <i class="fas fas fa-building"></i>
-              </div>
+              <div class="stat-icon stat-icon-green"><i class="fas fa-building"></i></div>
               <p class="stat-label">Aktif Bölümler</p>
-              <h2 class="stat-number">12</h2>
+              <h2 class="stat-number">-</h2>
             </div>
             <div class="stat-card">
-              <div class="stat-icon stat-icon-orange">
-                <i class="fas fa-user-check"></i>
-              </div>
+              <div class="stat-icon stat-icon-orange"><i class="fas fa-user-check"></i></div>
               <p class="stat-label">Temsilciler</p>
-              <h2 class="stat-number">12</h2>
+              <h2 class="stat-number">-</h2>
             </div>
             <div class="stat-card">
-              <div class="stat-icon stat-icon-purple">
-                <i class="fas fa-shield-alt"></i>
-              </div>
+              <div class="stat-icon stat-icon-purple"><i class="fas fa-shield-alt"></i></div>
               <p class="stat-label">Yöneticiler</p>
-              <h2 class="stat-number">3</h2>
+              <h2 class="stat-number">-</h2>
             </div>
           </div>
+
           <div class="bottom-section">
             <div class="recentRegisteredUsers">
               <h3>Son Kayıt Olanlar</h3>
@@ -98,97 +104,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Ahmet Yılmaz</td>
-                    <td>
-                      <span class="badge badge-blue">Department Rep</span>
-                    </td>
-                    <td class="department">Bilgisayar Müh.</td>
-                    <td class="registerDate">06.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Ahmet Yılmaz')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Zeynep Kaya</td>
-                    <td><span class="badge badge-purple">Dean</span></td>
-                    <td class="department">Mühendislik Fakültesi</td>
-                    <td class="registerDate">05.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Zeynep Kaya')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Mehmet Demir</td>
-                    <td>
-                      <span class="badge badge-blue">Department Rep</span>
-                    </td>
-                    <td class="department">Elektrik Müh.</td>
-                    <td class="registerDate">04.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Mehmet Demir')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Ayşe Şahin</td>
-                    <td><span class="badge badge-purple">Dean</span></td>
-                    <td class="department">Mimarlık Fakültesi</td>
-                    <td class="registerDate">03.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Ayşe Şahin')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Can Öztürk</td>
-                    <td><span class="badge badge-orange">Admin</span></td>
-                    <td class="department">Sistem Yönetimi</td>
-                    <td class="registerDate">02.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Can Öztürk')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Elif Arslan</td>
-                    <td>
-                      <span class="badge badge-blue">Department Rep</span>
-                    </td>
-                    <td class="department">Makine Müh.</td>
-                    <td class="registerDate">01.12.2025</td>
-                    <td><span class="badge badge-green">Aktif</span></td>
-                    <td style="text-align: center;">
-                        <button class="btn-availability" onclick="openModal('Elif Arslan')">
-                            <i class="fa-regular fa-calendar-xmark"></i>
-                        </button>
-                    </td>
-                  </tr>
+                  <tr><td colspan="6" style="text-align:center; color:#999;">Yükleniyor...</td></tr>
                 </tbody>
               </table>
             </div>
             <div class="quick-actions">
               <h3>Hızlı Erişim</h3>
-              
               <button class="addNewUsers" onclick="window.location.href='user_add.html'">
-                <i class="fa-solid fa-user-plus"></i>
-                Yeni Kullanıcı Ekle
+                <i class="fa-solid fa-user-plus"></i> Yeni Kullanıcı Ekle
               </button>
               <button class="systemSettings">
-                <i class="fa-solid fa-gear"></i>
-                Sistem Ayarları
+                <i class="fa-solid fa-gear"></i> Sistem Ayarları
               </button>
             </div>
           </div>
@@ -204,9 +130,7 @@
             </div>
             <div class="modal-body">
                 <span class="helper-text">Hocanın <b>müsait olmadığı</b> saatleri işaretleyin. Kırmızı alanlar yasaklı olacaktır.</span>
-                
-                <div class="schedule-grid" id="gridContainer">
-                    </div>
+                <div class="schedule-grid" id="gridContainer"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">İptal</button>
@@ -215,6 +139,7 @@
         </div>
     </div>
 
+    <script src="../js/app.js"></script>
     <script src="../js/admin.js"></script>
   </body>
 </html>

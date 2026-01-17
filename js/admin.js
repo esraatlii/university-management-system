@@ -1,174 +1,276 @@
-document.addEventListener('DOMContentLoaded', function() {
+const API_URL = "http://127.0.0.1:8001/api";
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // 1. GİRİŞ KONTROLÜ VE HEADER GÜNCELLEME
+    const user = JSON.parse(localStorage.getItem('user'));
     
-    // Hangi sayfada olduğumuzu anlayalım
+    if (!user) {
+        window.location.href = '../index.html'; // Giriş yoksa at
+        return;
+    }
+
+    // Header Bilgilerini Güncelle (Unvansız, sadece İsim)
+    const nameElement = document.querySelector('.user-info .name');
+    if (nameElement) nameElement.innerText = user.full_name;
+
+    const roleElement = document.querySelector('.user-info .role');
+    if (roleElement) roleElement.innerText = "Admin"; // Rolü sabit Admin yazabiliriz veya user.role
+
+    const avatarElement = document.querySelector('.user-profile .avatar');
+    if (avatarElement) {
+        // İsim baş harflerini al (Örn: Sena Yılmaz -> SY)
+        avatarElement.innerText = user.full_name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+    }
+
+    // Dashboard'daki "Hoşgeldin [İsim]" Kısmı
+    const welcomeHeader = document.querySelector('.welcome-text h3');
+    if (welcomeHeader) {
+        welcomeHeader.innerText = `Hoşgeldin, ${user.full_name}`;
+    }
+
+    // 2. SAYFAYA GÖRE FONKSİYONLARI ÇALIŞTIR
     const path = window.location.pathname;
 
-    /* --- 1. KULLANICI EKLEME SAYFASI (user_add.html) --- */
-    if (path.includes('user_add.html')) {
-        initUserAddPage();
-    }
-
-    /* --- 2. BÖLÜM YÖNETİMİ SAYFASI (department_identification.html) --- */
-    if (path.includes('department_identification.html')) {
-        initDepartmentPage();
-    }
-
-    /* --- 3. KULLANICI LİSTESİ / DASHBOARD (admin_dashboard.html) --- */
     if (path.includes('admin_dashboard.html') || path.endsWith('/admin/')) {
-        initAdminDashboard();
-        
-        // --- YENİ EKLENEN: Müsaitlik Gridini Başlat ---
+        await initAdminDashboard();
         initAvailabilityGrid();
+    } else if (path.includes('user_add.html')) {
+        await initUserAddPage();
+    } else if (path.includes('department_identification.html')) {
+        await initDepartmentPage();
     }
-
 });
 
 // ==========================================
-// 1. KULLANICI EKLEME SAYFASI İŞLEMLERİ
+// 1. DASHBOARD VERİLERİ (SAHTE VERİ YOK)
 // ==========================================
-function initUserAddPage() {
+async function initAdminDashboard() {
+    try {
+        // Paralel olarak Kullanıcıları ve Bölümleri çek
+        const [usersRes, deptsRes] = await Promise.all([
+            fetch(`${API_URL}/users/`),
+            fetch(`${API_URL}/departments/`)
+        ]);
+
+        const users = await usersRes.json();
+        const departments = await deptsRes.json();
+
+        // --- İSTATİSTİK KARTLARI ---
+        const stats = document.querySelectorAll('.stat-number');
+        if (stats.length >= 4) {
+            stats[0].innerText = users.length; // Toplam Kullanıcı
+            stats[1].innerText = departments.length; // Aktif Bölüm
+            stats[2].innerText = users.filter(u => u.role === 'department_rep').length; // Temsilciler
+            stats[3].innerText = users.filter(u => u.role === 'dean' || u.role === 'admin').length; // Yöneticiler
+        }
+
+        // --- SON KAYIT OLANLAR TABLOSU ---
+        const tableBody = document.querySelector('.users-table tbody');
+        if (tableBody) {
+            tableBody.innerHTML = ''; // Temizle
+
+            if (users.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">Kayıtlı kullanıcı yok.</td></tr>';
+                return;
+            }
+
+            // Son 5 kullanıcıyı gösterelim (ters çevirip kesiyoruz)
+            const recentUsers = users.slice().reverse().slice(0, 10);
+
+            recentUsers.forEach(u => {
+                // Rol Renklendirme
+                let roleBadge = 'badge-blue';
+                if (u.role === 'admin') roleBadge = 'badge-orange';
+                if (u.role === 'dean') roleBadge = 'badge-purple';
+
+                // Bölüm Adını Bul (users endpoint'inde department_id dönerse eşleştirme gerekebilir)
+                // Şimdilik backend'in department_name döndürdüğünü varsayıyoruz veya '-' koyuyoruz.
+                let deptName = u.department_name || '-';
+                if (!u.department_name && u.department_id) {
+                    const d = departments.find(dep => dep.id === u.department_id);
+                    if (d) deptName = d.name;
+                }
+
+                const row = `
+                    <tr>
+                        <td>${u.full_name}</td>
+                        <td><span class="badge ${roleBadge}">${u.role}</span></td>
+                        <td class="department">${deptName}</td>
+                        <td class="registerDate">${new Date(u.created_at || Date.now()).toLocaleDateString('tr-TR')}</td>
+                        <td><span class="badge badge-green">Aktif</span></td>
+                        <td style="text-align: center;">
+                            <button class="btn-availability" onclick="openModal('${u.full_name}')">
+                                <i class="fa-regular fa-calendar-xmark"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+    } catch (error) {
+        console.error("Dashboard verileri yüklenemedi:", error);
+    }
+}
+
+// ==========================================
+// 2. KULLANICI EKLEME SAYFASI
+// ==========================================
+async function initUserAddPage() {
     const roleSelect = document.getElementById('role'); 
     const deptSelect = document.getElementById('department');
     const saveBtn = document.querySelector('.createBtn'); 
     
-    if (!roleSelect || !deptSelect) return;
-
-    // Rol değişince Bölüm seçimini aç/kapat
-    roleSelect.addEventListener('change', function() {
-        if (this.value === '1') {
-            deptSelect.removeAttribute('disabled');
-        } else {
-            deptSelect.setAttribute('disabled', 'true');
-            deptSelect.value = ""; 
+    // Bölümleri Çek ve Select'e Doldur
+    try {
+        const res = await fetch(`${API_URL}/departments/`);
+        const depts = await res.json();
+        
+        if (deptSelect) {
+            deptSelect.innerHTML = '<option value="">Lütfen Seçiniz...</option>' + 
+                depts.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
         }
-    });
+    } catch (e) { console.error("Bölümler yüklenemedi"); }
 
-    // KAYDET BUTONU
-    if(saveBtn) {
-        saveBtn.addEventListener('click', function(e) {
+    // Rol değişince Bölüm alanını aç/kapat
+    if (roleSelect && deptSelect) {
+        roleSelect.addEventListener('change', function() {
+            // Sadece 'department_rep' (Öğretim Görevlisi/Temsilci) bölüm seçebilir
+            if (this.value === 'dekan' || this.value === 'admin') {
+                deptSelect.setAttribute('disabled', 'true');
+                deptSelect.value = ""; 
+            } else {
+                deptSelect.removeAttribute('disabled');
+            }
+        });
+    }
+
+    // Kaydet Butonu
+    if (saveBtn) {
+        saveBtn.addEventListener('click', async function(e) {
             e.preventDefault(); 
             
             const fullname = document.getElementById('fullname').value;
             const email = document.getElementById('email').value;
-            const roleSelect = document.getElementById('role');
-            const roleText = roleSelect.options[roleSelect.selectedIndex].text;
-            
-            if(fullname === "" || email === "" || roleSelect.value === "") {
-                alert("Lütfen isim, e-posta ve rol alanlarını doldurunuz.");
-                return;
-            }
+            const roleValue = roleSelect.value;
+            const password = document.getElementById('temp-password').value || "123456"; // Boşsa varsayılan
 
-            const newUser = {
-                id: Date.now(),
-                name: fullname,
+            // Backend Enum değerlerine çevir
+            let backendRole = "department_rep"; // Varsayılan
+            if (roleValue === "admin") backendRole = "admin";
+            if (roleValue === "dekan") backendRole = "dean";
+            // Not: HTML value'su '1' ise department_rep olarak kalır
+
+            const payload = {
+                full_name: fullname,
                 email: email,
-                role: roleText,
-                date: new Date().toLocaleDateString('tr-TR'),
-                status: "Aktif"
+                role: backendRole,
+                password: password,
+                department_id: (backendRole === "department_rep" && deptSelect.value) ? parseInt(deptSelect.value) : null
             };
 
-            let users = JSON.parse(localStorage.getItem('users')) || [];
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
+            try {
+                const response = await fetch(`${API_URL}/users/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-            alert("Kullanıcı başarıyla oluşturuldu ve listeye eklendi!");
-            document.querySelector('.userAdd-form').reset();
-            deptSelect.setAttribute('disabled', 'true');
+                if (response.ok) {
+                    alert("Kullanıcı başarıyla oluşturuldu!");
+                    document.querySelector('.userAdd-form').reset();
+                } else {
+                    const err = await response.json();
+                    alert("Hata: " + (err.detail || JSON.stringify(err)));
+                }
+            } catch (err) { 
+                console.error(err);
+                alert("Sunucu hatası!"); 
+            }
         });
     }
 }
 
 // ==========================================
-// 2. KULLANICI LİSTESİ (DASHBOARD) İŞLEMLERİ
+// 3. BÖLÜM YÖNETİMİ SAYFASI
 // ==========================================
-function initAdminDashboard() {
-    // --- NOT: Tablo yapın statik HTML olduğu için LocalStorage kısmını YORUMA ALDIM.
-    // Eğer veriler LocalStorage'dan gelsin istiyorsan burayı açabilirsin.
-    // Şimdilik sadece yeni özellik olan Modal Grid'i çalıştırıyoruz.
-
-    /*
-    const tableBody = document.querySelector('table tbody');
-    if (!tableBody) return;
-
-    let users = JSON.parse(localStorage.getItem('users'));
-
-    if (!users || users.length === 0) {
-        users = [
-            { id: 1, name: "Ahmet Yılmaz", role: "Dekan", email: "ahmet@uni.edu.tr", date: "10.12.2024", status: "Aktif" },
-            { id: 2, name: "Ayşe Demir", role: "Öğretim Görevlisi", email: "ayse@uni.edu.tr", date: "11.12.2024", status: "Aktif" }
-        ];
-        localStorage.setItem('users', JSON.stringify(users));
-    }
-    */
-    // Mevcut statik tablon korunduğu için buraya dokunmuyoruz.
-}
-
-// ==========================================
-// 3. BÖLÜM YÖNETİMİ İŞLEMLERİ
-// ==========================================
-function initDepartmentPage() {
-    const addBtn = document.querySelector('.addNewDepartmentBtn');
+async function initDepartmentPage() {
     const tableBody = document.querySelector('.department-table tbody');
+    const addBtn = document.querySelector('.addNewDepartmentBtn');
 
-    if (!addBtn || !tableBody) return;
+    // Tabloyu Doldur
+    async function loadDepts() {
+        if (!tableBody) return;
+        tableBody.innerHTML = '';
+        try {
+            const res = await fetch(`${API_URL}/departments/`);
+            const depts = await res.json();
+            
+            depts.forEach(d => {
+                const row = `
+                    <tr>
+                        <td><span class="code-badge">${d.code || 'CODE'}</span></td>
+                        <td class="font-medium">${d.name}</td>
+                        <td>${new Date().toLocaleDateString('tr-TR')}</td>
+                        <td class="actions">
+                            <div class="action-icons">
+                                <i class="fa-regular fa-trash-can" onclick="deleteDept(${d.id})" style="color:red;"></i>
+                            </div>
+                        </td>
+                    </tr>`;
+                tableBody.innerHTML += row;
+            });
+        } catch (e) { console.error("Bölüm listesi hatası"); }
+    }
 
-    addBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const deptName = document.getElementById('departmentName').value;
-        const deptCode = document.getElementById('departmentCode').value;
+    await loadDepts();
 
-        if(deptName === "" || deptCode === "") {
-            alert("Eksik bilgi!"); 
-            return;
-        }
+    // Yeni Bölüm Ekle
+    if (addBtn) {
+        addBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('departmentName').value;
+            const code = document.getElementById('departmentCode').value;
 
-        const today = new Date().toLocaleDateString('tr-TR');
-        const newRow = `
-            <tr>
-                <td><span class="badge badge-blue">${deptCode.toUpperCase()}</span></td>
-                <td>${deptName}</td>
-                <td>${today}</td>
-                <td class="actions">
-                    <div class="action-icons">
-                        <i class="fa-regular fa-trash-can" onclick="deleteRow(this)"></i>
-                    </div>
-                </td>
-            </tr>
-        `;
-        tableBody.insertAdjacentHTML('beforeend', newRow);
-        document.querySelector('.addNewDepartmentForm').reset();
-    });
+            if (!name || !code) return alert("Lütfen tüm alanları doldurun.");
+
+            try {
+                const res = await fetch(`${API_URL}/departments/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: name, code: code.toUpperCase() }) // code ekledim
+                });
+
+                if (res.ok) {
+                    alert("Bölüm eklendi.");
+                    document.querySelector('.addNewDepartmentForm').reset();
+                    loadDepts();
+                } else {
+                    alert("Ekleme başarısız.");
+                }
+            } catch (e) { console.error(e); }
+        });
+    }
+
+    // Silme Fonksiyonu (Global'e atıyoruz ki HTML onclick görebilsin)
+    window.deleteDept = async function(id) {
+        if (!confirm("Bu bölümü silmek istediğinize emin misiniz?")) return;
+        try {
+            const res = await fetch(`${API_URL}/departments/${id}`, { method: 'DELETE' });
+            if (res.ok) {
+                alert("Bölüm silindi.");
+                loadDepts();
+            } else {
+                alert("Silinemedi.");
+            }
+        } catch (e) { console.error(e); }
+    };
 }
 
 // ==========================================
-// YARDIMCI FONKSİYONLAR
+// 4. MÜSAİTLİK GRID (GÖRSEL ARAYÜZ)
 // ==========================================
-
-function getInitials(name) {
-    return name.split(' ').map(word => word[0]).join('').toUpperCase().substring(0, 2);
-}
-
-window.deleteUser = function(id) {
-    if(confirm("Bu kullanıcıyı silmek istediğinize emin misiniz?")) {
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        users = users.filter(user => user.id != id);
-        localStorage.setItem('users', JSON.stringify(users));
-        location.reload();
-    }
-}
-
-window.deleteRow = function(btn) {
-    if(confirm("Silmek istiyor musunuz?")) {
-        btn.closest('tr').remove();
-    }
-}
-
-
-// =========================================================
-// --- YENİ EKLENEN ÖZELLİK: HOCA MÜSAİTLİK MODALI ---
-// =========================================================
-
-// Global değişkenler
 let modal, gridContainer, modalTitle;
 
 function initAvailabilityGrid() {
@@ -176,20 +278,17 @@ function initAvailabilityGrid() {
     gridContainer = document.getElementById('gridContainer');
     modalTitle = document.getElementById('modalTitle');
 
-    // Eğer bu elementler sayfada yoksa (başka sayfadaysak) hata vermesin
     if (!modal || !gridContainer) return;
 
+    // Saatler ve Günler
     const hours = ['08:30', '09:30', '10:30', '11:30', '13:30', '14:30', '15:30', '16:30'];
     const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-
-    // Grid'i Temizle (tekrar tekrar eklenmesin)
-    gridContainer.innerHTML = '';
-
-    // Başlık Satırını (Saat boşluk + Pzt, Sal...) tekrar ekle
-    const emptyCorner = document.createElement('div');
-    gridContainer.appendChild(emptyCorner);
-
     const dayLabels = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum'];
+
+    gridContainer.innerHTML = ''; 
+
+    // Grid Header (Gün İsimleri)
+    gridContainer.appendChild(document.createElement('div')); // Sol üst boş köşe
     dayLabels.forEach(d => {
         const dh = document.createElement('div');
         dh.className = 'day-header';
@@ -197,24 +296,22 @@ function initAvailabilityGrid() {
         gridContainer.appendChild(dh);
     });
 
-    // Saatleri ve Kutuları Oluştur
+    // Grid Body (Saatler ve Kutular)
     hours.forEach(time => {
-        // 1. Saat Etiketi (Sol taraf)
-        const timeLabel = document.createElement('div');
-        timeLabel.className = 'time-label';
-        timeLabel.innerText = time;
-        gridContainer.appendChild(timeLabel);
+        // Saat Etiketi
+        const tl = document.createElement('div');
+        tl.className = 'time-label';
+        tl.innerText = time;
+        gridContainer.appendChild(tl);
 
-        // 2. Gün Kutucukları
+        // 5 Gün İçin Kutular
         days.forEach(day => {
             const btn = document.createElement('div');
             btn.className = 'slot-btn';
-            
-            // Veri özelliklerini ekle
             btn.dataset.day = day;
             btn.dataset.time = time;
             
-            // Tıklama Olayı (Kırmızı/Beyaz yapma)
+            // Tıklayınca Kırmızı Yap / Kaldır
             btn.onclick = function() {
                 this.classList.toggle('unavailable');
             };
@@ -222,29 +319,17 @@ function initAvailabilityGrid() {
             gridContainer.appendChild(btn);
         });
     });
-
-    // Dışarı tıklayınca kapatma
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModal();
-        }
-    }
 }
 
-// Modalı Açan Fonksiyon (HTML'den çağrılıyor: onclick="openModal(...)")
+// Modalı Açma Kapama Fonksiyonları
 window.openModal = function(name) {
-    if(modalTitle) modalTitle.innerText = `${name} - Müsaitlik Ayarları`;
+    if (modalTitle) modalTitle.innerText = `${name} - Müsaitlik Ayarları`;
+    // Önce hepsini temizle (İleride backend'den çekip doluları işaretleyeceğiz)
+    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('unavailable'));
     
-    // Her açılışta grid'i sıfırla (temizle)
-    const slots = document.querySelectorAll('.slot-btn');
-    if(slots) {
-        slots.forEach(btn => btn.classList.remove('unavailable'));
-    }
-    
-    if(modal) modal.classList.add('active');
-}
+    if (modal) modal.classList.add('active');
+};
 
-// Modalı Kapatan Fonksiyon
 window.closeModal = function() {
-    if(modal) modal.classList.remove('active');
-}
+    if (modal) modal.classList.remove('active');
+};

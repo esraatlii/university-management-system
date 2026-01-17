@@ -3,44 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yeni Kullanıcı Ekleme Paneli</title>
+    <title>Yeni Kullanıcı Ekle</title>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/user_add.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <aside class="sidebar">
-        <div class="sidebar-header">Kampüs Yön.</div>
-        <nav class="menu-items">
-          <a href="admin_dashboard.html"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
-          
-          <a href="user_add.html" class="active"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanıcı Ekle</span></a>
-          
-          <a href="department_identification.html"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
-          
-          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
-          
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış yap</span></a>
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="admin_dashboard.html" class="menu-item">
+                <i class="fa-solid fa-user-group"></i> Kullanıcı Listesi
+            </a>
+            <a href="user_add.html" class="menu-item active">
+                <i class="fa-solid fa-user-plus"></i> Yeni Kullanıcı Ekle
+            </a>
+            <a href="department_identification.html" class="menu-item">
+                <i class="fa-solid fa-building"></i> Bölüm Tanımlama
+            </a>
         </nav>
-      </aside>
+
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
 
       <main class="main-content">
-        <header class="header">
-          <h3>Kullanıcı Yönetimi</h3>
-          <div class="logoutSection">
-            <div class="user-profile-circle">
-              SB
+        <header class="top-header">
+            <h2 class="page-title">Kullanıcı Yönetimi</h2>
+            <div class="header-right">
+                <div class="notification-box">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <span class="name">...</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
             </div>
-          
-          <div class="user-info">
-            <span class="userInfoName">Görevli İsmi</span>
-            <span class="userInfoRole">Rolü</span>
-          </div>
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-          </div>
         </header>
         <div class="userAdd-form-container">
           <form class="userAdd-form">
@@ -61,10 +74,8 @@
             <div class="form-group password-group">
               <label for="temp-password">Geçiçi Şifre</label>
               <div class="password-wrapper">
-                <input type="password" id="temp-password">
-                <span class="toggle-password">
-                  <i class="fa-regular fa-eye"></i>
-                </span>
+                <input type="password" id="temp-password" placeholder="Boş bırakılırsa: 123456">
+                <span class="toggle-password"><i class="fa-regular fa-eye"></i></span>
               </div>
             </div>
 
@@ -74,9 +85,9 @@
               <label for="role">Rol Seçin</label>
               <select id="role" class="roleSelect">
                 <option value="">Lütfen Seçiniz...</option>
-                <option value="dekan">Dekan</option>
+                <option value="dekan">Dekan (Dean)</option>
                 <option value="admin">Admin</option>
-                <option value="1">Ögretim Görevlisi</option>
+                <option value="1">Öğretim Görevlisi / Temsilci</option>
               </select>
             </div>
             
@@ -84,10 +95,7 @@
               <label for="department">Bölüm (Department)</label>
               <select id="department" class="departmentSelect" disabled>
                 <option value="">Lütfen Seçiniz...</option>
-                <option value="CENG">Bilgisayar Mühendisliği</option>
-                <option value="EEE">Elektrik-Elektronik Müh.</option>
-                <option value="MATH">Matematik</option>
-              </select>
+                </select>
               <p class="info-text">Bu alan sadece 'Öğretim Görevlisi' seçildiğinde aktif olur.</p>
             </div>
             <div class="form-actions">
@@ -97,13 +105,8 @@
             </div>
           </form>
         </div>
-
-
- 
-
       </main>
-      <script src="../js/app.js"></script>
+    <script src="../js/app.js"></script>
     <script src="../js/admin.js"></script>
-
 </body>
 </html>

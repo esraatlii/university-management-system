@@ -3,44 +3,58 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Paneli - Bölüm Yönetimi</title>
+    <title>Bölüm Tanımlama</title>
     <link rel="stylesheet" href="../css/style.css" />
     <link rel="stylesheet" href="../css/department_identification.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <div class="dashboard-container">
       <aside class="sidebar">
-        <div class="sidebar-header">Kampüs Yön.</div>
-        <nav class="menu-items">
-          <a href="admin_dashboard.html"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
-          
-          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanıcı Ekle</span></a>
-          
-          <a href="department_identification.html" class="active"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
-          
-          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
-          
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış Yap</span></a>
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="admin_dashboard.html" class="menu-item">
+                <i class="fa-solid fa-user-group"></i> Kullanıcı Listesi
+            </a>
+            <a href="user_add.html" class="menu-item">
+                <i class="fa-solid fa-user-plus"></i> Yeni Kullanıcı Ekle
+            </a>
+            <a href="department_identification.html" class="menu-item active">
+                <i class="fa-solid fa-building"></i> Bölüm Tanımlama
+            </a>
         </nav>
-      </aside>
+
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
 
       <main class="main-content">
-        <header class="header">
-          <h3>Bölüm Yönetimi</h3>
-          <div class="logoutSection">
-            <div class="user-profile-circle">
-              SB
+        <header class="top-header">
+            <h2 class="page-title">Bölüm Yönetimi</h2>
+            <div class="header-right">
+                <div class="notification-box">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <span class="name">...</span>
+                        <span class="role">Admin</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
             </div>
-            <div class="user-info">
-                <span class="userInfoName">Sultan Sena B.</span>
-                <span class="userInfoRole">Yönetici</span>
-            </div>
-            <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-          </div>
         </header>
 
         <div class="content-body">
@@ -85,39 +99,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><span class="badge badge-blue">CENG</span></td>
-                        <td>Bilgisayar Mühendisliği</td>
-                        <td>15.01.2024</td>
-                        <td class="actions">
-                            <div class="action-icons">
-                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
-                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
-                                <i class="fa-regular fa-trash-can" title="Sil"></i>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge badge-blue">MATH</span></td>
-                        <td>Matematik</td>
-                        <td>15.01.2024</td>
-                        <td class="actions">
-                            <div class="action-icons">
-                                <i class="fa-regular fa-eye" title="Görüntüle"></i>
-                                <i class="fa-regular fa-pen-to-square" title="Düzenle"></i>
-                                <i class="fa-regular fa-trash-can" title="Sil"></i>
-                            </div>
-                        </td>
-                    </tr>
+                    <tr><td colspan="4" style="text-align:center; color:#999;">Yükleniyor...</td></tr>
                 </tbody>
             </table>
             
             <div class="table-bottom">
-                <p>Toplam <b>10</b> bölümden <b>1-10</b> arası gösteriliyor</p>
+                <p>Kayıtlar listeleniyor.</p>
                 <div class="tableButtons">
-                    <button>Önceki</button>
-                    <button>Sonraki</button>
-                </div>
+                    </div>
             </div>
           </div>
         </div>

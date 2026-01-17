@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 /* --- TEMEL AYARLAR --- */
 :root {
     --primary-blue: #2563EB;
@@ -134,3 +135,50 @@ body {
 .tag-red { background: #FEE2E2; color: #991B1B; }
 .tag-orange { background: #FEF3C7; color: #92400E; }
 .close-btn { cursor: pointer; font-size: 1.2rem; }
+/* Yerleştirilmiş Ders Kartı */
+.placed-card {
+    width: 100%;
+    height: 100%;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.placed-card.blue { background-color: #EFF6FF; border-left: 3px solid #2563EB; color: #1E40AF; }
+.placed-card.red { background-color: #FEF2F2; border-left: 3px solid #EF4444; color: #991B1B; }
+
+.remove-btn {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: none;
+    border: none;
+    color: #999;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+}
+.remove-btn:hover { color: red; }
+
+/* Modal Listesi İçin */
+.room-item.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: #f9f9f9;
+}
+
+.tag {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 11px;
+    display: inline-block;
+}
+.tag-green { background: #D1FAE5; color: #065F46; } /* Uygun */
+.tag-red { background: #FEE2E2; color: #991B1B; }   /* Dolu / Kapasite */
+.tag-orange { background: #FFEDD5; color: #9A3412; } /* Hoca Meşgul */

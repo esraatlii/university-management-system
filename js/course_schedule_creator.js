@@ -1,251 +1,303 @@
-// --- 1. SAHTE VERİTABANI (MOCK DATA) ---
-const classrooms = [
-    { id: 'Amphi-A', cap: 150, type: 'Amphi' },
-    { id: 'Class-101', cap: 40, type: 'Class' },
-    { id: 'Class-102', cap: 60, type: 'Class' },
-    { id: 'LAB-204', cap: 30, type: 'Lab' },
-    { id: 'LAB-305', cap: 30, type: 'Lab' }
-];
+const API_URL = "http://127.0.0.1:8001/api";
+const user = JSON.parse(localStorage.getItem('user'));
 
-const instructorConstraints = {
-    'Dr. Mehmet Öz': ['Wed-10:30', 'Mon-09:30'],
-    'Dr. Can Yıldız': ['Fri-15:30']
-};
+let draggedCourse = null;
+let targetSlot = null;
 
-// YENİ: Diğer bölümlerin rezervasyonları (Çakışma Kontrolü için)
-// Format: 'Gün-Saat': { 'SınıfID': 'Bölüm Adı' }
-const externalBookings = {
-    'Mon-08:30': { 'Amphi-A': 'Bilgisayar Müh.', 'Class-101': 'Endüstri Müh.' },
-    'Tue-10:30': { 'LAB-204': 'Elektrik-Elektronik' },
-    'Wed-09:30': { 'Amphi-A': 'Makine Müh.' }
-};
+let allOfferings = [];          
+let allHalls = [];              
+let existingSchedule = [];      
+let instructorUnavailability = [];
+let allTimeSlots = []; // YENİ: Zaman ID'lerini tutmak için
 
-let draggedData = null; 
-let targetCellData = null; 
+// Backend (1) -> Frontend (Mon) Haritası
+const dayIntMap = { 1: "Mon", 2: "Tue", 3: "Wed", 4: "Thu", 5: "Fri" };
+// Frontend (Mon) -> Backend (1) Haritası
+const dayStrMap = { "Mon": 1, "Tue": 2, "Wed": 3, "Thu": 4, "Fri": 5 };
 
-document.addEventListener('DOMContentLoaded', () => {
-    const draggables = document.querySelectorAll('.course-card');
-    const dropZones = document.querySelectorAll('.grid-cell');
-
-    // SÜRÜKLEME BAŞLANGICI
-    draggables.forEach(item => {
-        item.addEventListener('dragstart', (e) => {
-            draggedData = {
-                code: item.dataset.code,
-                name: item.dataset.name,
-                instructor: item.dataset.instructor,
-                students: parseInt(item.dataset.students)
-            };
-            item.classList.add('dragging');
-        });
-
-        item.addEventListener('dragend', () => item.classList.remove('dragging'));
-    });
-
-    // BIRAKMA ALANLARI
-    dropZones.forEach(zone => {
-        zone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            zone.classList.add('drag-over');
-        });
-        
-        zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-        
-        zone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            zone.classList.remove('drag-over');
-
-            if (zone.children.length > 0) return; 
-
-            targetCellData = {
-                day: zone.dataset.day,
-                time: zone.dataset.time,
-                element: zone
-            };
-
-            openRoomModal();
-        });
-    });
+document.addEventListener('DOMContentLoaded', async () => {
+    if (user) {
+        const avatar = document.querySelector('.user-avatar');
+        if(avatar) avatar.innerText = user.full_name.substring(0,2).toUpperCase();
+    }
+    console.log("🚀 Program Başlatılıyor...");
+    await loadAllData();
+    renderCourseList();
+    initGridEvents();
 });
 
-const modal = document.getElementById('roomModal');
-const roomList = document.getElementById('roomList');
+async function loadAllData() {
+    try {
+        const [resOfferings, resHalls, resSched, resBusy, resSlots] = await Promise.all([
+            fetch(`${API_URL}/course-offerings/`),        
+            fetch(`${API_URL}/halls/`),                   
+            fetch(`${API_URL}/schedule-entries`),         
+            fetch(`${API_URL}/instructor-unavailability`),
+            fetch(`${API_URL}/time_slots`) // YENİ: Zaman dilimlerini çekiyoruz
+        ]);
 
-function openRoomModal() {
+        allOfferings = await resOfferings.json();
+        allHalls = await resHalls.json();
+        existingSchedule = await resSched.json();
+        instructorUnavailability = await resBusy.json();
+        allTimeSlots = await resSlots.json(); // Hafızaya al
+
+    } catch (error) {
+        console.error("❌ Veri yükleme hatası:", error);
+    }
+}
+
+// --- YARDIMCI: GÜN ve SAATTEN -> TIME_SLOT_ID BULMA ---
+function findTimeSlotId(dayStr, timeStr) {
+    const dayInt = dayStrMap[dayStr]; // Mon -> 1
+    // Backend'den gelen saat "08:30:00" formatında olabilir, biz "08:30" arıyoruz
+    const slot = allTimeSlots.find(s => 
+        s.day_of_week === dayInt && 
+        s.start_time.startsWith(timeStr)
+    );
+    return slot ? slot.id : null;
+}
+
+function renderCourseList() {
+    const container = document.getElementById('courseListContainer');
+    container.innerHTML = '';
+    if (allOfferings.length === 0) {
+        container.innerHTML = '<p style="padding:20px; color:#666;">Ders bulunamadı.</p>';
+        return;
+    }
+    allOfferings.forEach(offering => {
+        const courseCode = offering.course_code || offering.course_name.split(' ')[0]; 
+        const instructorName = offering.instructor_name || "Hoca Atanmamış";
+        
+        const card = document.createElement('div');
+        card.className = 'course-card';
+        card.draggable = true;
+        
+        card.dataset.offeringId = offering.id;
+        card.dataset.courseId = offering.course_id;
+        card.dataset.code = courseCode;
+        card.dataset.name = offering.course_name;
+        card.dataset.instructorId = offering.instructor_id;
+        card.dataset.instructorName = instructorName;
+        card.dataset.studentCount = offering.student_count || 0;
+
+        card.innerHTML = `
+            <div style="color:#2563EB; font-weight:700;">${courseCode}</div>
+            <div style="font-size:0.9rem;">${offering.course_name}</div>
+            <div style="font-size:0.75rem; color:#666;">
+                <i class="fa-solid fa-users"></i> ${offering.student_count || 0} Öğrenci<br>
+                ${instructorName}
+            </div>
+        `;
+
+        card.addEventListener('dragstart', () => { 
+            draggedCourse = { ...card.dataset }; 
+            card.style.opacity = '0.5'; 
+        });
+        card.addEventListener('dragend', () => { card.style.opacity = '1'; });
+        container.appendChild(card);
+    });
+}
+
+function initGridEvents() {
+    document.querySelectorAll('.grid-cell').forEach(cell => {
+        cell.addEventListener('dragover', (e) => { e.preventDefault(); cell.classList.add('drag-over'); });
+        cell.addEventListener('dragleave', () => { cell.classList.remove('drag-over'); });
+        cell.addEventListener('drop', (e) => {
+            e.preventDefault();
+            cell.classList.remove('drag-over');
+            if (cell.children.length > 0) { alert("Bu saat dolu!"); return; }
+            targetSlot = { day: cell.dataset.day, time: cell.dataset.time, element: cell };
+            openRoomSelectionModal();
+        });
+    });
+}
+
+function openRoomSelectionModal() {
+    const modal = document.getElementById('roomModal');
+    const list = document.getElementById('roomList');
+    const info = document.getElementById('modalCourseInfo');
+    const warningBox = document.getElementById('instructorWarning');
+
+    if (!draggedCourse) return;
     modal.classList.add('active');
-    document.getElementById('modalTitle').innerText = `${draggedData.code} için Sınıf Ata`;
-    document.getElementById('modalCourseInfo').innerText = 
-        `${draggedData.name} - ${draggedData.instructor} (${draggedData.students} Öğrenci)`;
+    
+    const courseSize = parseInt(draggedCourse.studentCount) || 0;
 
-    roomList.innerHTML = '';
+    info.innerHTML = `
+        <span style="color:#2563EB; font-weight:bold;">${draggedCourse.name}</span>
+        <span class="tag tag-blue" style="font-size:0.7rem; margin-left:5px;">${courseSize} Öğrenci</span><br>
+        <span style="font-size:0.9rem;">${draggedCourse.instructorName}</span><br>
+        <span style="color:#666; font-size:0.8rem;">${targetSlot.day} - ${targetSlot.time}</span>
+    `;
 
-    // O anki zaman dilimini al (Örn: "Mon-08:30")
-    const timeKey = `${targetCellData.day}-${targetCellData.time}`;
+    list.innerHTML = '';
+    
+    const isInstructorBusy = instructorUnavailability.some(u => {
+        return parseInt(u.instructor_id) === parseInt(draggedCourse.instructorId) &&
+               dayIntMap[u.day_of_week] === targetSlot.day &&
+               u.start_time.startsWith(targetSlot.time);
+    });
 
-    classrooms.forEach(room => {
-        let status = 'success';
-        let statusText = 'Uygun';
-        let badgeClass = 'tag-green';
-        let extraInfo = '';
+    if (isInstructorBusy) {
+        warningBox.style.display = 'block';
+        warningBox.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> <b>UYARI:</b> ${draggedCourse.instructorName} bu saatte MÜSAİT DEĞİL!`;
+    } else {
+        warningBox.style.display = 'none';
+    }
 
-        // 1. Kapasite Kontrolü
-        if (draggedData.students > room.cap) {
-            status = 'error';
-            statusText = `Kapasite Yetersiz (${room.cap})`;
-            badgeClass = 'tag-red';
-        }
+    allHalls.forEach(hall => {
+        const isRoomBooked = existingSchedule.some(s => s.hall_id === hall.id && s.day === targetSlot.day && s.start_time === targetSlot.time);
+        const roomCap = parseInt(hall.capacity) || 0;
+        const isCapacityLow = courseSize > roomCap;
 
-        // 2. Hoca Müsaitlik Kontrolü
-        const busyTimes = instructorConstraints[draggedData.instructor] || [];
-        let instructorWarning = false;
-        if (busyTimes.includes(timeKey)) {
-            instructorWarning = true;
-        }
+        let statusHtml = '<span class="tag tag-green">Uygun</span>';
+        let itemClass = 'room-item';
+        let clickAction = () => placeCourse(hall);
 
-        // 3. (YENİ) DİĞER BÖLÜM ÇAKIŞMASI KONTROLÜ
-        let externalConflict = null;
-        if (externalBookings[timeKey] && externalBookings[timeKey][room.id]) {
-            externalConflict = externalBookings[timeKey][room.id];
-            status = 'error';
-            statusText = `DOLU: ${externalConflict}`; // Örn: DOLU: Bilgisayar Müh.
-            badgeClass = 'tag-red'; // Kırmızı etiket
+        if (isRoomBooked) {
+            statusHtml = '<span class="tag tag-red">DOLU</span>';
+            itemClass += ' disabled';
+            clickAction = null;
+        } else if (isInstructorBusy) {
+            statusHtml = '<span class="tag tag-orange">Hoca Meşgul</span>';
+            clickAction = () => { if(confirm("Hoca müsait değil. Yine de atamak istiyor musunuz?")) placeCourse(hall); }
+        } else if (isCapacityLow) {
+            statusHtml = `<span class="tag tag-orange" style="background-color:#fff7ed; color:#c2410c;">Kapasite Yetersiz (${roomCap})</span>`;
+            clickAction = () => { if(confirm("Kapasite yetersiz. Yine de atamak istiyor musunuz?")) placeCourse(hall); }
         }
 
         const li = document.createElement('li');
-        li.className = 'room-item';
-        
-        // HTML İçeriği
-        li.innerHTML = `
-            <div class="room-info">
-                <h4>${room.id} <span style="font-weight:400; font-size:0.8rem;">(${room.type})</span></h4>
-                <p>Kapasite: ${room.cap}</p>
-            </div>
-            <div style="text-align:right;">
-                <span class="tag ${badgeClass}">${statusText}</span>
-                ${instructorWarning ? '<br><span class="tag tag-orange" style="margin-top:4px; display:inline-block;">Hoca Müsait Değil</span>' : ''}
-            </div>
-        `;
-        
-        // Tıklama Olayı (Çakışma verisini de gönderiyoruz)
-        li.onclick = () => selectRoom(room, status, instructorWarning, externalConflict);
-        roomList.appendChild(li);
+        li.className = itemClass;
+        li.innerHTML = `<div><strong>${hall.hall_name}</strong> <span style="font-size:0.8rem;">(Kap: ${roomCap})</span></div>${statusHtml}`;
+        if (clickAction) li.onclick = clickAction;
+        list.appendChild(li);
     });
 }
 
-function closeModal() { modal.classList.remove('active'); }
+// --- MANUEL EKLEME ---
+async function placeCourse(hall) {
+    const tsId = findTimeSlotId(targetSlot.day, targetSlot.time);
+    if(!tsId) { alert("Hata: Bu saat dilimi veritabanında bulunamadı!"); return; }
 
-// --- DERSİ YERLEŞTİRME ---
-function selectRoom(room, status, instructorBusy, externalConflict) {
-    closeModal();
-
-    let finalStatusClass = 'status-success';
-    let errorMessage = '';
-
-    // Hata tipine göre kart rengini ve mesajını ayarla
-    if (externalConflict) {
-        finalStatusClass = 'status-error';
-        errorMessage = `<div style="font-size:0.7rem; color:#991B1B;">⛔ ${externalConflict}</div>`;
-    } else if (status === 'error') {
-        finalStatusClass = 'status-error';
-        errorMessage = '<div style="font-size:0.7rem; color:#991B1B;">⚠️ Kapasite!</div>';
-    } else if (instructorBusy) {
-        finalStatusClass = 'status-warning';
-        errorMessage = '<div style="font-size:0.7rem; color:#92400E;">🕒 Hoca Dolu</div>';
-    }
-
-    const newCard = document.createElement('div');
-    newCard.className = `placed-card ${finalStatusClass}`;
-    newCard.dataset.courseCode = draggedData.code; 
-
-    newCard.innerHTML = `
-        <div>
-            <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:2px;">
-                <span>${draggedData.code}</span>
-                <span style="font-size:0.7rem; opacity:0.7;">${room.id}</span>
-            </div>
-            <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${draggedData.name}</div>
-            ${errorMessage}
-        </div>
-
-        <div class="card-actions">
-            <button class="action-btn btn-edit" title="Düzenle">✏️</button>
-            <button class="action-btn btn-delete" title="Sil">🗑️</button>
+    const cell = targetSlot.element;
+    cell.innerHTML = `
+        <div class="placed-card">
+            <div style="font-weight:bold; color:#1e3a8a;">${draggedCourse.code}</div>
+            <div style="font-size:0.7rem;">${hall.hall_name}</div>
+            <div style="font-size:0.65rem; color:#555;">${draggedCourse.instructorName}</div>
+            <button class="remove-btn" onclick="removeScheduleItem(this)">×</button>
         </div>
     `;
+    existingSchedule.push({ hall_id: hall.id, day: targetSlot.day, start_time: targetSlot.time, course_code: draggedCourse.code });
 
-    // Silme İşlemi
-    const btnDelete = newCard.querySelector('.btn-delete');
-    btnDelete.onclick = function() {
-        if(confirm('Dersi kaldırmak istiyor musunuz?')) {
-            newCard.remove();
-            const sidebarItem = document.querySelector(`.course-card[data-code="${newCard.dataset.courseCode}"]`);
-            if (sidebarItem) {
-                sidebarItem.style.display = 'block';
-                sidebarItem.style.opacity = '1';
+    await fetch(`${API_URL}/schedule-entries`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ 
+            course_offering_id: parseInt(draggedCourse.offeringId),
+            hall_id: hall.id, 
+            time_slot_id: tsId, // ARTIK ID GÖNDERİYORUZ
+            week_pattern: "all" // Varsayılan değer
+        })
+    });
+    closeModal();
+}
+
+// --- OTOMATİK OLUŞTURUCU ---
+async function generateAutoScheduleFrontend() {
+    if(!confirm("Bu işlem, yerleştirilmemiş dersleri otomatik olarak boşluklara dağıtacak.\n\nBaşlasın mı?")) return;
+
+    const btn = document.querySelector('button[onclick="generateAutoScheduleFrontend()"]');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Çalışıyor...';
+    btn.disabled = true;
+
+    try {
+        await loadAllData();
+        const placedCourseCodes = new Set(existingSchedule.map(s => s.course_code));
+        const pendingCourses = allOfferings.filter(offering => {
+            const code = offering.course_code || offering.course_name.split(' ')[0];
+            return !placedCourseCodes.has(code);
+        });
+
+        if (pendingCourses.length === 0) { alert("Tüm dersler zaten yerleştirilmiş!"); return; }
+
+        const sortedHalls = [...allHalls].sort((a, b) => (parseInt(a.capacity)||0) - (parseInt(b.capacity)||0));
+        let placedCount = 0;
+        let errors = [];
+
+        for (const course of pendingCourses) {
+            let isPlaced = false;
+            const courseCode = course.course_code || course.course_name.split(' ')[0];
+            const studentCount = parseInt(course.student_count) || 0;
+            const instructorId = parseInt(course.instructor_id);
+
+            loopDays: for (const day of ["Mon", "Tue", "Wed", "Thu", "Fri"]) {
+                for (const time of ["08:30", "09:30", "10:30", "11:30", "13:30", "14:30", "15:30", "16:30"]) {
+                    
+                    // ID Bul
+                    const tsId = findTimeSlotId(day, time);
+                    if (!tsId) continue;
+
+                    // Hoca Müsait mi?
+                    const isInstructorBusy = instructorUnavailability.some(u => 
+                        parseInt(u.instructor_id) === instructorId &&
+                        dayIntMap[u.day_of_week] === day &&
+                        u.start_time.startsWith(time)
+                    );
+                    if (isInstructorBusy) continue;
+
+                    // Sınıf Bul
+                    for (const hall of sortedHalls) {
+                        const hallCap = parseInt(hall.capacity) || 0;
+                        if (hallCap < studentCount) continue; 
+
+                        const isRoomBusy = existingSchedule.some(s => 
+                            s.hall_id === hall.id && s.day === day && s.start_time === time
+                        );
+                        if (isRoomBusy) continue;
+
+                        // Kaydet
+                        const res = await fetch(`${API_URL}/schedule-entries`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                course_offering_id: course.id,
+                                hall_id: hall.id,
+                                time_slot_id: tsId, // ID GÖNDERİYORUZ
+                                week_pattern: "all"
+                            })
+                        });
+
+                        if (res.ok) {
+                            existingSchedule.push({ hall_id: hall.id, day: day, start_time: time, course_code: courseCode });
+                            placedCount++;
+                            isPlaced = true;
+                            break loopDays;
+                        } else {
+                             const err = await res.json();
+                             console.error(`❌ API Hatası (${courseCode}):`, err);
+                        }
+                    }
+                }
             }
-            updateIssuesPanel();
+            if (!isPlaced) errors.push(courseCode);
         }
-    };
 
-    // Düzenleme İşlemi
-    const btnEdit = newCard.querySelector('.btn-edit');
-    btnEdit.onclick = function() {
-        targetCellData = {
-            day: newCard.parentElement.dataset.day,
-            time: newCard.parentElement.dataset.time,
-            element: newCard.parentElement
-        };
-        newCard.remove();
-        openRoomModal();
-    };
+        let msg = `İşlem Tamamlandı!\nToplam ${placedCount} ders yerleştirildi.`;
+        if (errors.length > 0) msg += `\n\nYerleşemeyenler:\n` + errors.join(", ");
+        alert(msg);
+        location.reload();
 
-    targetCellData.element.appendChild(newCard);
-
-    // Listeden Gizle
-    const sidebarItem = document.querySelector(`.course-card[data-code="${draggedData.code}"]`);
-    if (sidebarItem) {
-        sidebarItem.style.display = 'none';
-    }
-
-    addIssueToPanel(draggedData, room, status, instructorBusy, externalConflict);
-}
-
-function addIssueToPanel(course, room, status, instBusy, extConflict) {
-    const panel = document.getElementById('issues-container');
-    if (panel.innerText.includes('Henüz bir sorun yok')) panel.innerHTML = '';
-
-    // Diğer Bölüm Çakışması Hatası
-    if (extConflict) {
-        panel.innerHTML += `
-            <div style="padding:10px; background:#FEF2F2; border:1px solid #EF4444; border-radius:6px; margin-bottom:8px; font-size:0.85rem;">
-                <strong style="color:#991B1B">⛔ Oda Çakışması</strong><br>
-                ${room.id}, <b>${extConflict}</b> tarafından kullanılıyor.
-            </div>
-        `;
-        return; // Çakışma varsa diğer hataları yazmaya gerek yok
-    }
-
-    // Kapasite Hatası
-    if (status === 'error') {
-        panel.innerHTML += `
-            <div style="padding:10px; background:#FEF2F2; border:1px solid #EF4444; border-radius:6px; margin-bottom:8px; font-size:0.85rem;">
-                <strong style="color:#991B1B">🚫 Kapasite Hatası</strong><br>
-                ${course.code} -> ${room.id} sınıfına sığmıyor.
-            </div>
-        `;
-    }
-
-    // Hoca Uyarısı
-    if (instBusy) {
-        panel.innerHTML += `
-            <div style="padding:10px; background:#FFFBEB; border:1px solid #F59E0B; border-radius:6px; margin-bottom:8px; font-size:0.85rem;">
-                <strong style="color:#92400E">⚠️ Hoca Uyarısı</strong><br>
-                ${course.instructor}, bu saatte uygun görünmüyor.
-            </div>
-        `;
+    } catch (e) {
+        console.error(e);
+        alert("Hata: " + e.message);
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     }
 }
 
-function updateIssuesPanel() {
-    // Panel temizleme mantığı buraya eklenebilir
-}
+window.removeScheduleItem = function(btn) { if(confirm("Silmek istediğinize emin misiniz?")) btn.parentElement.parentElement.innerHTML = ''; }
+window.closeModal = function() { document.getElementById('roomModal').classList.remove('active'); }

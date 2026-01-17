@@ -14,41 +14,60 @@
 <body>
     <div class="dashboard-container">
     <aside class="sidebar">
-        <div class="sidebar-header">Kampüs Yön.</div>
-        <nav class="menu-items">
-          <a href="#" class="active"><i class="fa-solid fa-user-group"></i><span>Kullanıcı Listesi</span></a>
-          
-          <a href="user_add.html"><i class="fa-solid fa-user-plus"></i><span>Yeni Kullanici Ekle</span></a>
-          
-          <a href="department_identification.html"><i class="fas fa-building"></i><span>Fakülte & Bölüm Ayarları</span></a>
-          
-          <a href="#"><i class="fa-solid fa-gear"></i><span>Ayarlar</span></a>
-          
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Çıkış yap</span></a>
+        <div class="logo-area">
+            <div class="logo-icon"><i class="fa-solid fa-calendar-days"></i></div>
+            <div class="logo-text">
+                <h3>Ders Programı</h3>
+                <span>Yönetim Sistemi</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+            <a href="dean_dashboard.html" class="menu-item ">
+                <i class="fa-solid fa-border-all"></i> Genel Bakış
+            </a>
+            <a href="tumprogramlar.html" class="menu-item">
+                <i class="fa-solid fa-book-open"></i> Tüm Programlar
+            </a>
+            <a href="halls.html" class="menu-item active">
+                <i class="fa-solid fa-building"></i> Sınıflar
+            </a>
+            <a href="instructors.html" class="menu-item">
+    <i class="fa-solid fa-users"></i> Akademisyenler
+</a>
         </nav>
-      </aside>
+
+        <div class="logout-area">
+            <a href="../index.html" class="menu-item">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Çıkış Yap
+            </a>
+        </div>
+    </aside>
 
       <main class="main-content">
-        <header class="header">
-          <h3>Kullanıcı Yönetimi</h3>
-          <div class="logoutSection">
-            <div class="user-profile-circle">
-              SB
+        <header class="top-header">
+            <h2 class="page-title">Kullanıcı Yönetimi</h2>
+            <div class="header-right">
+                <div class="notification-box">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="dot"></span>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">MD</div>
+                    <div class="user-info">
+                        <span class="name">Arş. Gör. Mehmet Demir</span>
+                        <span class="role">Dekan</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
             </div>
-          
-          <div class="user-info">
-            <span class="userInfoName">Görevli İsmi</span>
-            <span class="userInfoRole">Rolü</span>
-          </div>
-          <a href="../index.html"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
-          </div>
         </header>
 
     <div class="content-body">
             <div class="addClassRoom">
             <form class="addClassRoomForm">
                 <h3 class="form-titles">Add New Classroom / Hall</h3>
-                <label class="form-label">Define a new classroom or hall with its specifications</label>
+                <p class="form-label">Define a new classroom or hall with its specifications</p>
                 <div class="form-row three-columns">
                     <div class="form-group">
                         <label>Hall Name</label>
@@ -71,10 +90,26 @@
                 <div class="facilities">
                     <h4>Facilities & Amenities</h4>
                     <div class="checkbox-group">
-                        <label><input type="checkbox"> Projector</label>
-                        <label><input type="checkbox"> Whiteboard</label>
-                        <label><input type="checkbox"> Air Conditioning</label>
-                        <label><input type="checkbox"> Computers</label>
+                        <label class="facility-label">
+                            <input type="checkbox">
+                            <span class="checkmark"></span> 
+                            Projector
+                        </label>
+                        <label class="facility-label">
+                            <input type="checkbox">
+                            <span class="checkmark"></span> 
+                            Whiteboard
+                        </label>
+                        <label class="facility-label">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Air Conditioning
+                            </label>
+                        <label class="facility-label">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Computers
+                        </label>
                     </div>
                 </div>
 
@@ -88,8 +123,8 @@
             <div class="table-container">
                 <div class="table-header">
                     <div>
-                    <h3>Existing Classrooms & Halls</h3>
-                    <p>2 classroom defined</p>
+                        <h3>Existing Classrooms & Halls</h3>
+                        <p>2 classroom defined</p>
                     </div>
                     <div>
                         <button class="exportBtn">Export</button>
@@ -111,8 +146,10 @@
                         <td class="font-medium">Engineering Hall A-101</td>
                         <td><span class="badge badge-purple">Lecture Hall</span></td>
                         <td>120 Students</td>
-                        <td class="tags">
-                            <span>Projector</span><span>AC</span><span>Whiteboard</span>
+                        <td class="facilities-cell">
+                            <span class="facility-tag">Projector</span>
+                            <span class="facility-tag">AC</span>
+                            <span class="facility-tag">Whiteboard</span>
                         </td>
                         <td class="actions">
                             <div class="action-icons">
@@ -126,8 +163,10 @@
                         <td class="font-medium">Computer Lab B-205</td>
                         <td><span class="badge badge-purple">Computer Lab</span></td>
                         <td>40 Students</td>
-                        <td>
-                            <span>Project</span><span>AC</span><span>Computers</span>
+                        <td class="facilities-cell">
+                            <span class="facility-tag">Projector</span>
+                            <span class="facility-tag">AC</span>
+                            <span class="facility-tag">Computers</span>
                         </td>
                         <td class="actions">
                             <div class="action-icons">
