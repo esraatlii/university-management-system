@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
 from backend.database import db_dependency
 from backend import models, schemas
+from backend.services import scheduler
 
 router = APIRouter(prefix="/api/schedules", tags=["schedules"])
 
@@ -140,3 +141,14 @@ def lock_schedule(schedule_id: int, user_id: int | None = None, db: db_dependenc
     db.commit()
     db.refresh(obj)
     return _out(db, obj.id)
+
+
+@router.post("/{schedule_id}/auto-generate")
+def auto_generate_schedule(schedule_id: int, db: db_dependency):
+
+    result = scheduler.generate_automated_schedule(db, schedule_id)
+
+    if result.get("status") == "error":
+        raise HTTPException(status_code=404, detail=result["message"])
+
+    return result
