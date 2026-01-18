@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from backend import models
 from backend.services.schedule_conflicts import check_schedule_entry_conflicts_multi
-
+from sqlalchemy import or_
 
 def generate_automated_schedule(db: Session, schedule_id: int):
     # 1. ADIM: Mevcut program (schedule) bilgilerini çek
@@ -27,7 +27,24 @@ def generate_automated_schedule(db: Session, schedule_id: int):
     )
 
     # Salonlar ve zaman dilimleri
-    halls = db.query(models.Halls).filter(models.Halls.department_id == schedule.department_id).all()
+
+    # Planlama yapılan bölümün fakülte bilgisini al
+    dept = db.query(models.Departments).filter(models.Departments.id == schedule.department_id).first()
+    target_faculty_id = dept.faculty_id
+
+    # Sadece aynı fakültedeki sınıfları getir:
+    # 1. Ya direkt benim bölümümün sınıfı olacak
+    # 2. Ya da benim fakültemde olan paylaşımlı (shared) bir sınıf olacak
+    halls = db.query(models.Halls).filter(
+        models.Halls.faculty_id == target_faculty_id,
+        or_(
+            models.Halls.department_id == schedule.department_id,
+            models.Halls.is_shared == True
+        )
+    ).all()
+
+    halls = sorted(halls,key=lambda x: (x.department_id != schedule.department_id)) #false dönecği için 0 olur ve bölümün kendi sınıfları listenin başına gelir
+
     slots = db.query(models.TimeSlots).order_by(models.TimeSlots.day_of_week, models.TimeSlots.start_time).all()
 
     # 4. ADIM: Zorluk Sırasına Göre Diz (Öğrenci sayısı çok olan dersi önce yerleştir)
@@ -41,10 +58,19 @@ def generate_automated_schedule(db: Session, schedule_id: int):
         offering = row.CourseOfferings
         duration = row.weekly_hours
         is_placed = False
+        last_reason = "Kapasite yetersiz veya uygun tipte sınıf yok"  # Başlangıç sebebi
 
         # Her ders için uygun salonları tara
         for hall in halls:
             if is_placed: break
+
+            # Eğer ders Lab ise sadece Lab tipindeki sınıfları dene
+            if offering.course_type == models.CourseType.lab:
+                if hall.hall_type != models.HallType.lab:
+                    continue
+            else:
+                if hall.hall_type == models.HallType.lab:
+                    continue
 
             # Kapasite kontrolü
             if offering.student_count > hall.capacity:
@@ -79,9 +105,17 @@ def generate_automated_schedule(db: Session, schedule_id: int):
                     results["placed"] += 1
                     break  # Bu ders için yer bulundu, slot döngüsünden çık
 
+                else:
+                    last_reason = conflict["message"]
+
         if not is_placed:
-            results["failed"] += 1
-            results["failed_details"].append(f"Ders ID {offering.id} için yer bulunamadı.")
+            course_info = db.query(models.Courses).filter(models.Courses.id == offering.course_id).first()
+            results["failed_details"].append({
+                "course_id": offering.id,
+                "course_code": course_info.code if course_info else "Bilinmiyor",
+                "course_name": course_info.name if course_info else "Bilinmiyor",
+                "reason": last_reason
+            })
 
     # 6. ADIM: Değişiklikleri Kaydet
     db.commit()

@@ -148,6 +148,7 @@ class Halls(Base):
     __tablename__ = "halls"
     id = Column(Integer, primary_key=True,index=True)
     hall_name = Column(String(50), index=True, nullable=False)
+    faculty_id = Column(Integer, ForeignKey("faculties.id"), nullable=False, index=True)
     capacity = Column(Integer,nullable=False)
     hall_type = Column(SQLAEnum(HallType,name="hall_type_enum"), index=True, nullable=False)
     department_id = Column(Integer,ForeignKey("departments.id"),index=True, nullable=True)
@@ -163,9 +164,9 @@ class Halls(Base):
         UniqueConstraint("department_id", "hall_name", name="uq_halls_department_hall_name"),
 
         CheckConstraint(
-         "(is_shared = TRUE AND department_id IS NULL) OR (is_shared = FALSE AND department_id IS NOT NULL)",
-                 name="ck_halls_shared_department_rule"
-            ),
+            "(is_shared = TRUE) OR (is_shared = FALSE AND department_id IS NOT NULL)",
+            name="ck_halls_shared_department_rule"
+        ),
     )
 
 class ScheduleStatus(str, Enum):

@@ -134,7 +134,7 @@ def check_schedule_entry_conflicts_multi(
                     "ok": False,
                     "reason": "shared_hall_conflict",
                     "conflict_entry_id": c.id,
-                    "message": "Çakışma: Paylaşımlı derslik bu saat diliminde (term genelinde) dolu.",
+                    "message": f"Çakışma: {hall.hall_name} dersliği bu saatte başka bir bölümde dolu.",
                 }
         else:
             c = base_q.filter(
